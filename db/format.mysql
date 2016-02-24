@@ -1,0 +1,1125 @@
+-- MySQL dump 10.13  Distrib 5.6.26, for FreeBSD10.2 (amd64)
+--
+-- Host: localhost    Database: deter
+-- ------------------------------------------------------
+-- Server version	5.6.26
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `circleattribute`
+--
+
+DROP TABLE IF EXISTS `circleattribute`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `circleattribute` (
+  `idx` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) DEFAULT NULL,
+  `datatype` enum('STRING','INT','FLOAT','OPAQUE') DEFAULT NULL,
+  `optional` tinyint(4) DEFAULT NULL,
+  `access` enum('READ_WRITE','READ_ONLY','WRITE_ONLY','NO_ACCESS') DEFAULT NULL,
+  `description` text,
+  `format` varchar(256) DEFAULT NULL,
+  `formatdescription` text,
+  `length` int(11) NOT NULL DEFAULT '0',
+  `sequence` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`idx`)
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `circleattributevalue`
+--
+
+DROP TABLE IF EXISTS `circleattributevalue`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `circleattributevalue` (
+  `cidx` int(11) NOT NULL,
+  `aidx` int(11) NOT NULL,
+  `value` text,
+  KEY `cidx` (`cidx`),
+  KEY `aidx` (`aidx`),
+  CONSTRAINT `circleattributevalue_ibfk_1` FOREIGN KEY (`cidx`) REFERENCES `circles` (`idx`),
+  CONSTRAINT `circleattributevalue_ibfk_2` FOREIGN KEY (`aidx`) REFERENCES `circleattribute` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `circlechallenge`
+--
+
+DROP TABLE IF EXISTS `circlechallenge`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `circlechallenge` (
+  `idx` bigint(20) NOT NULL,
+  `uidx` int(11) DEFAULT NULL,
+  `cidx` int(11) DEFAULT NULL,
+  `expires` datetime DEFAULT NULL,
+  `permidx` int(11) DEFAULT NULL,
+  UNIQUE KEY `idx_2` (`idx`),
+  KEY `uidx` (`uidx`),
+  KEY `cidx` (`cidx`),
+  KEY `permidx` (`permidx`),
+  CONSTRAINT `circlechallenge_ibfk_1` FOREIGN KEY (`uidx`) REFERENCES `rawusers` (`idx`),
+  CONSTRAINT `circlechallenge_ibfk_2` FOREIGN KEY (`cidx`) REFERENCES `circles` (`idx`),
+  CONSTRAINT `circlechallenge_ibfk_3` FOREIGN KEY (`permidx`) REFERENCES `permissions` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `circlechallengeidx`
+--
+
+DROP TABLE IF EXISTS `circlechallengeidx`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `circlechallengeidx` (
+  `idx` bigint(20) DEFAULT NULL,
+  UNIQUE KEY `idx` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `circlecreds`
+--
+
+DROP TABLE IF EXISTS `circlecreds`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `circlecreds` (
+  `lidx` int(11) NOT NULL,
+  `cidx` int(11) NOT NULL,
+  KEY `cidx` (`cidx`),
+  KEY `lidx` (`lidx`),
+  CONSTRAINT `circlecreds_ibfk_1` FOREIGN KEY (`cidx`) REFERENCES `credentials` (`idx`),
+  CONSTRAINT `circlecreds_ibfk_2` FOREIGN KEY (`lidx`) REFERENCES `circles` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `circlemembercreds`
+--
+
+DROP TABLE IF EXISTS `circlemembercreds`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `circlemembercreds` (
+  `lidx` int(11) NOT NULL,
+  `cidx` int(11) NOT NULL,
+  KEY `cidx` (`cidx`),
+  KEY `lidx` (`lidx`),
+  CONSTRAINT `circlemembercreds_ibfk_1` FOREIGN KEY (`cidx`) REFERENCES `credentials` (`idx`),
+  CONSTRAINT `circlemembercreds_ibfk_2` FOREIGN KEY (`lidx`) REFERENCES `circles` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `circleownercreds`
+--
+
+DROP TABLE IF EXISTS `circleownercreds`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `circleownercreds` (
+  `lidx` int(11) NOT NULL,
+  `cidx` int(11) NOT NULL,
+  KEY `cidx` (`cidx`),
+  KEY `lidx` (`lidx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `circleperms`
+--
+
+DROP TABLE IF EXISTS `circleperms`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `circleperms` (
+  `cidx` int(11) NOT NULL,
+  `uidx` int(11) NOT NULL,
+  `permidx` int(11) NOT NULL,
+  KEY `cidx` (`cidx`),
+  KEY `uidx` (`uidx`),
+  KEY `permidx` (`permidx`),
+  CONSTRAINT `circleperms_ibfk_1` FOREIGN KEY (`cidx`) REFERENCES `circles` (`idx`),
+  CONSTRAINT `circleperms_ibfk_2` FOREIGN KEY (`uidx`) REFERENCES `rawusers` (`idx`),
+  CONSTRAINT `circleperms_ibfk_3` FOREIGN KEY (`permidx`) REFERENCES `permissions` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `circles`
+--
+
+DROP TABLE IF EXISTS `circles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `circles` (
+  `idx` int(11) NOT NULL AUTO_INCREMENT,
+  `circleid` varchar(256) DEFAULT NULL,
+  `owneridx` int(11) NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`idx`),
+  KEY `owneridx` (`owneridx`),
+  CONSTRAINT `circles_ibfk_1` FOREIGN KEY (`owneridx`) REFERENCES `rawusers` (`idx`)
+) ENGINE=InnoDB AUTO_INCREMENT=355 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `circleusers`
+--
+
+DROP TABLE IF EXISTS `circleusers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `circleusers` (
+  `cidx` int(11) NOT NULL,
+  `uidx` int(11) NOT NULL,
+  UNIQUE KEY `uidx_2` (`uidx`,`cidx`),
+  KEY `uidx` (`uidx`),
+  KEY `cidx` (`cidx`),
+  CONSTRAINT `circleusers_ibfk_1` FOREIGN KEY (`uidx`) REFERENCES `rawusers` (`idx`),
+  CONSTRAINT `circleusers_ibfk_2` FOREIGN KEY (`cidx`) REFERENCES `circles` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `credentials`
+--
+
+DROP TABLE IF EXISTS `credentials`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `credentials` (
+  `idx` int(11) NOT NULL AUTO_INCREMENT,
+  `expiration` datetime DEFAULT NULL,
+  `cred` text,
+  UNIQUE KEY `idx` (`idx`)
+) ENGINE=InnoDB AUTO_INCREMENT=249526 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `experimentaspects`
+--
+
+DROP TABLE IF EXISTS `experimentaspects`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `experimentaspects` (
+  `idx` int(11) NOT NULL AUTO_INCREMENT,
+  `eidx` int(11) NOT NULL,
+  `type` varchar(256) DEFAULT NULL,
+  `subtype` varchar(256) DEFAULT NULL,
+  `name` varchar(1024) DEFAULT NULL,
+  `path` varchar(1024) DEFAULT NULL,
+  `ref` varchar(1024) DEFAULT NULL,
+  PRIMARY KEY (`idx`),
+  KEY `eidx` (`eidx`),
+  CONSTRAINT `experimentaspects_ibfk_1` FOREIGN KEY (`eidx`) REFERENCES `experiments` (`idx`)
+) ENGINE=InnoDB AUTO_INCREMENT=302 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `experimentattribute`
+--
+
+DROP TABLE IF EXISTS `experimentattribute`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `experimentattribute` (
+  `idx` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) DEFAULT NULL,
+  `datatype` enum('STRING','INT','FLOAT','OPAQUE') DEFAULT NULL,
+  `optional` tinyint(4) DEFAULT NULL,
+  `access` enum('READ_WRITE','READ_ONLY','WRITE_ONLY','NO_ACCESS') DEFAULT NULL,
+  `description` text,
+  `format` varchar(256) DEFAULT NULL,
+  `formatdescription` text,
+  `sequence` int(11) NOT NULL DEFAULT '0',
+  `length` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`idx`)
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `experimentattributevalue`
+--
+
+DROP TABLE IF EXISTS `experimentattributevalue`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `experimentattributevalue` (
+  `eidx` int(11) NOT NULL,
+  `aidx` int(11) NOT NULL,
+  `value` text,
+  KEY `eidx` (`eidx`),
+  KEY `aidx` (`aidx`),
+  CONSTRAINT `experimentattributevalue_ibfk_1` FOREIGN KEY (`eidx`) REFERENCES `experiments` (`idx`),
+  CONSTRAINT `experimentattributevalue_ibfk_2` FOREIGN KEY (`aidx`) REFERENCES `experimentattribute` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `experimentcreds`
+--
+
+DROP TABLE IF EXISTS `experimentcreds`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `experimentcreds` (
+  `lidx` int(11) NOT NULL,
+  `cidx` int(11) NOT NULL,
+  KEY `lidx` (`lidx`),
+  KEY `cidx` (`cidx`),
+  CONSTRAINT `experimentcreds_ibfk_1` FOREIGN KEY (`lidx`) REFERENCES `experiments` (`idx`),
+  CONSTRAINT `experimentcreds_ibfk_2` FOREIGN KEY (`cidx`) REFERENCES `credentials` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `experimentperms`
+--
+
+DROP TABLE IF EXISTS `experimentperms`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `experimentperms` (
+  `eidx` int(11) NOT NULL,
+  `cidx` int(11) NOT NULL,
+  `permidx` int(11) NOT NULL,
+  KEY `eidx` (`eidx`),
+  KEY `cidx` (`cidx`),
+  KEY `permidx` (`permidx`),
+  CONSTRAINT `experimentperms_ibfk_1` FOREIGN KEY (`eidx`) REFERENCES `experiments` (`idx`),
+  CONSTRAINT `experimentperms_ibfk_2` FOREIGN KEY (`cidx`) REFERENCES `circles` (`idx`),
+  CONSTRAINT `experimentperms_ibfk_3` FOREIGN KEY (`permidx`) REFERENCES `permissions` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `experiments`
+--
+
+DROP TABLE IF EXISTS `experiments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `experiments` (
+  `idx` int(11) NOT NULL AUTO_INCREMENT,
+  `eid` varchar(256) DEFAULT NULL,
+  `owneridx` int(11) NOT NULL,
+  `compdir` varchar(1024) DEFAULT NULL,
+  UNIQUE KEY `idx` (`idx`),
+  UNIQUE KEY `eid` (`eid`),
+  KEY `owneridx` (`owneridx`),
+  CONSTRAINT `experiments_ibfk_1` FOREIGN KEY (`owneridx`) REFERENCES `rawusers` (`idx`)
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `facets`
+--
+
+DROP TABLE IF EXISTS `facets`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `facets` (
+  `idx` int(11) NOT NULL AUTO_INCREMENT,
+  `ridx` int(11) DEFAULT NULL,
+  `name` varchar(256) DEFAULT NULL,
+  `type` varchar(256) DEFAULT NULL,
+  `value` double DEFAULT NULL,
+  `units` varchar(256) DEFAULT NULL,
+  PRIMARY KEY (`idx`),
+  UNIQUE KEY `ridx_2` (`ridx`,`name`),
+  KEY `ridx` (`ridx`),
+  CONSTRAINT `facets_ibfk_1` FOREIGN KEY (`ridx`) REFERENCES `resources` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `facettags`
+--
+
+DROP TABLE IF EXISTS `facettags`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `facettags` (
+  `idx` int(11) NOT NULL AUTO_INCREMENT,
+  `fidx` int(11) DEFAULT NULL,
+  `name` varchar(256) DEFAULT NULL,
+  `value` varchar(256) DEFAULT NULL,
+  PRIMARY KEY (`idx`),
+  KEY `fidx` (`fidx`),
+  CONSTRAINT `facettags_ibfk_1` FOREIGN KEY (`fidx`) REFERENCES `facets` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `keytouser`
+--
+
+DROP TABLE IF EXISTS `keytouser`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `keytouser` (
+  `ukey` varchar(255) DEFAULT NULL,
+  `uidx` int(11) NOT NULL,
+  `expiration` datetime DEFAULT NULL,
+  KEY `uidx` (`uidx`),
+  CONSTRAINT `keytouser_ibfk_1` FOREIGN KEY (`uidx`) REFERENCES `rawusers` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `libraries`
+--
+
+DROP TABLE IF EXISTS `libraries`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `libraries` (
+  `idx` int(11) NOT NULL AUTO_INCREMENT,
+  `libid` varchar(256) NOT NULL,
+  `owneridx` int(11) NOT NULL,
+  UNIQUE KEY `idx` (`idx`),
+  UNIQUE KEY `libid` (`libid`),
+  KEY `owneridx` (`owneridx`),
+  CONSTRAINT `libraries_ibfk_1` FOREIGN KEY (`owneridx`) REFERENCES `rawusers` (`idx`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `libraryattribute`
+--
+
+DROP TABLE IF EXISTS `libraryattribute`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `libraryattribute` (
+  `idx` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL,
+  `datatype` enum('STRING','INT','FLOAT','OPAQUE') NOT NULL,
+  `optional` tinyint(4) DEFAULT NULL,
+  `access` enum('READ_WRITE','READ_ONLY','WRITE_ONLY','NO_ACCESS') NOT NULL,
+  `description` text,
+  `format` varchar(256) DEFAULT NULL,
+  `formatdescription` text,
+  `sequence` int(11) NOT NULL DEFAULT '0',
+  `length` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`idx`)
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `libraryattributevalue`
+--
+
+DROP TABLE IF EXISTS `libraryattributevalue`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `libraryattributevalue` (
+  `lidx` int(11) NOT NULL,
+  `aidx` int(11) NOT NULL,
+  `value` text,
+  KEY `lidx` (`lidx`),
+  KEY `aidx` (`aidx`),
+  CONSTRAINT `libraryattributevalue_ibfk_1` FOREIGN KEY (`lidx`) REFERENCES `libraries` (`idx`),
+  CONSTRAINT `libraryattributevalue_ibfk_2` FOREIGN KEY (`aidx`) REFERENCES `libraryattribute` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `librarycreds`
+--
+
+DROP TABLE IF EXISTS `librarycreds`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `librarycreds` (
+  `lidx` int(11) NOT NULL,
+  `cidx` int(11) NOT NULL,
+  KEY `lidx` (`lidx`),
+  KEY `cidx` (`cidx`),
+  CONSTRAINT `librarycreds_ibfk_1` FOREIGN KEY (`lidx`) REFERENCES `libraries` (`idx`),
+  CONSTRAINT `librarycreds_ibfk_2` FOREIGN KEY (`cidx`) REFERENCES `credentials` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `librarymembers`
+--
+
+DROP TABLE IF EXISTS `librarymembers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `librarymembers` (
+  `lidx` int(11) NOT NULL,
+  `eidx` int(11) NOT NULL,
+  UNIQUE KEY `lidx` (`lidx`,`eidx`),
+  KEY `eidx` (`eidx`),
+  CONSTRAINT `librarymembers_ibfk_1` FOREIGN KEY (`lidx`) REFERENCES `libraries` (`idx`),
+  CONSTRAINT `librarymembers_ibfk_2` FOREIGN KEY (`eidx`) REFERENCES `experiments` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `libraryperms`
+--
+
+DROP TABLE IF EXISTS `libraryperms`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `libraryperms` (
+  `lidx` int(11) NOT NULL,
+  `cidx` int(11) NOT NULL,
+  `permidx` int(11) NOT NULL,
+  KEY `lidx` (`lidx`),
+  KEY `cidx` (`cidx`),
+  KEY `permidx` (`permidx`),
+  CONSTRAINT `libraryperms_ibfk_1` FOREIGN KEY (`lidx`) REFERENCES `libraries` (`idx`),
+  CONSTRAINT `libraryperms_ibfk_2` FOREIGN KEY (`cidx`) REFERENCES `circles` (`idx`),
+  CONSTRAINT `libraryperms_ibfk_3` FOREIGN KEY (`permidx`) REFERENCES `permissions` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `logincreds`
+--
+
+DROP TABLE IF EXISTS `logincreds`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `logincreds` (
+  `lidx` int(11) DEFAULT '0',
+  `cidx` int(11) NOT NULL,
+  KEY `cidx` (`cidx`),
+  CONSTRAINT `logincreds_ibfk_1` FOREIGN KEY (`cidx`) REFERENCES `credentials` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `notification`
+--
+
+DROP TABLE IF EXISTS `notification`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `notification` (
+  `idx` int(11) NOT NULL AUTO_INCREMENT,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `body` text,
+  PRIMARY KEY (`idx`)
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `permissions`
+--
+
+DROP TABLE IF EXISTS `permissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `permissions` (
+  `idx` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(256) DEFAULT NULL,
+  `valid_for` varchar(256) DEFAULT NULL,
+  UNIQUE KEY `idx` (`idx`),
+  UNIQUE KEY `name` (`name`,`valid_for`)
+) ENGINE=InnoDB AUTO_INCREMENT=353 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `projectapprovalcreds`
+--
+
+DROP TABLE IF EXISTS `projectapprovalcreds`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `projectapprovalcreds` (
+  `lidx` int(11) NOT NULL,
+  `cidx` int(11) NOT NULL,
+  KEY `cidx` (`cidx`),
+  KEY `lidx` (`lidx`),
+  CONSTRAINT `projectapprovalcreds_ibfk_1` FOREIGN KEY (`cidx`) REFERENCES `credentials` (`idx`),
+  CONSTRAINT `projectapprovalcreds_ibfk_2` FOREIGN KEY (`lidx`) REFERENCES `rawprojects` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `projectattribute`
+--
+
+DROP TABLE IF EXISTS `projectattribute`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `projectattribute` (
+  `idx` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) DEFAULT NULL,
+  `datatype` enum('STRING','INT','FLOAT','OPAQUE') DEFAULT NULL,
+  `optional` tinyint(4) DEFAULT NULL,
+  `access` enum('READ_WRITE','READ_ONLY','WRITE_ONLY','NO_ACCESS') DEFAULT NULL,
+  `description` text,
+  `format` varchar(256) DEFAULT NULL,
+  `formatdescription` text,
+  `sequence` int(11) NOT NULL DEFAULT '0',
+  `length` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`idx`)
+) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `projectattributevalue`
+--
+
+DROP TABLE IF EXISTS `projectattributevalue`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `projectattributevalue` (
+  `pidx` int(11) NOT NULL,
+  `aidx` int(11) NOT NULL,
+  `value` text,
+  KEY `pidx` (`pidx`),
+  KEY `aidx` (`aidx`),
+  CONSTRAINT `projectattributevalue_ibfk_1` FOREIGN KEY (`pidx`) REFERENCES `rawprojects` (`idx`),
+  CONSTRAINT `projectattributevalue_ibfk_2` FOREIGN KEY (`aidx`) REFERENCES `projectattribute` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `projectchallenge`
+--
+
+DROP TABLE IF EXISTS `projectchallenge`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `projectchallenge` (
+  `idx` bigint(20) NOT NULL,
+  `uidx` int(11) NOT NULL,
+  `pidx` int(11) NOT NULL,
+  `expires` datetime DEFAULT NULL,
+  `permidx` int(11) DEFAULT NULL,
+  UNIQUE KEY `idx` (`idx`),
+  KEY `pidx` (`pidx`),
+  KEY `uidx` (`uidx`),
+  KEY `permidx` (`permidx`),
+  CONSTRAINT `projectchallenge_ibfk_1` FOREIGN KEY (`pidx`) REFERENCES `rawprojects` (`idx`),
+  CONSTRAINT `projectchallenge_ibfk_2` FOREIGN KEY (`uidx`) REFERENCES `rawusers` (`idx`),
+  CONSTRAINT `projectchallenge_ibfk_3` FOREIGN KEY (`permidx`) REFERENCES `permissions` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `projectchallengeidx`
+--
+
+DROP TABLE IF EXISTS `projectchallengeidx`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `projectchallengeidx` (
+  `idx` bigint(20) DEFAULT NULL,
+  UNIQUE KEY `idx` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `projectcreds`
+--
+
+DROP TABLE IF EXISTS `projectcreds`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `projectcreds` (
+  `lidx` int(11) NOT NULL,
+  `cidx` int(11) NOT NULL,
+  KEY `cidx` (`cidx`),
+  KEY `lidx` (`lidx`),
+  CONSTRAINT `projectcreds_ibfk_1` FOREIGN KEY (`cidx`) REFERENCES `credentials` (`idx`),
+  CONSTRAINT `projectcreds_ibfk_2` FOREIGN KEY (`lidx`) REFERENCES `rawprojects` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `projectmembercreds`
+--
+
+DROP TABLE IF EXISTS `projectmembercreds`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `projectmembercreds` (
+  `lidx` int(11) NOT NULL,
+  `cidx` int(11) NOT NULL,
+  KEY `cidx` (`cidx`),
+  KEY `lidx` (`lidx`),
+  CONSTRAINT `projectmembercreds_ibfk_1` FOREIGN KEY (`cidx`) REFERENCES `credentials` (`idx`),
+  CONSTRAINT `projectmembercreds_ibfk_2` FOREIGN KEY (`lidx`) REFERENCES `rawprojects` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `projectperms`
+--
+
+DROP TABLE IF EXISTS `projectperms`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `projectperms` (
+  `pidx` int(11) NOT NULL,
+  `uidx` int(11) NOT NULL,
+  `permidx` int(11) NOT NULL,
+  KEY `uidx` (`uidx`),
+  KEY `pidx` (`pidx`),
+  KEY `permidx` (`permidx`),
+  CONSTRAINT `projectperms_ibfk_1` FOREIGN KEY (`uidx`) REFERENCES `rawusers` (`idx`),
+  CONSTRAINT `projectperms_ibfk_2` FOREIGN KEY (`pidx`) REFERENCES `rawprojects` (`idx`),
+  CONSTRAINT `projectperms_ibfk_3` FOREIGN KEY (`permidx`) REFERENCES `permissions` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Temporary view structure for view `projects`
+--
+
+DROP TABLE IF EXISTS `projects`;
+/*!50001 DROP VIEW IF EXISTS `projects`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `projects` AS SELECT 
+ 1 AS `idx`,
+ 1 AS `projectid`,
+ 1 AS `owneridx`,
+ 1 AS `created`,
+ 1 AS `linkedidx`,
+ 1 AS `flags`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `projectusers`
+--
+
+DROP TABLE IF EXISTS `projectusers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `projectusers` (
+  `pidx` int(11) NOT NULL,
+  `uidx` int(11) NOT NULL,
+  UNIQUE KEY `pidx_2` (`pidx`,`uidx`),
+  KEY `pidx` (`pidx`),
+  KEY `uidx` (`uidx`),
+  CONSTRAINT `projectusers_ibfk_1` FOREIGN KEY (`pidx`) REFERENCES `rawprojects` (`idx`),
+  CONSTRAINT `projectusers_ibfk_2` FOREIGN KEY (`uidx`) REFERENCES `rawusers` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `rawprojects`
+--
+
+DROP TABLE IF EXISTS `rawprojects`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `rawprojects` (
+  `idx` int(11) NOT NULL AUTO_INCREMENT,
+  `nameidx` int(11) NOT NULL,
+  `owneridx` int(11) NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `linkedidx` int(11) DEFAULT NULL,
+  `flags` int(11) NOT NULL DEFAULT '0',
+  UNIQUE KEY `idx` (`idx`),
+  UNIQUE KEY `nameidx` (`nameidx`),
+  KEY `owneridx` (`owneridx`),
+  KEY `linkedidx` (`linkedidx`),
+  CONSTRAINT `rawprojects_ibfk_1` FOREIGN KEY (`owneridx`) REFERENCES `rawusers` (`idx`),
+  CONSTRAINT `rawprojects_ibfk_2` FOREIGN KEY (`linkedidx`) REFERENCES `circles` (`idx`),
+  CONSTRAINT `rawprojects_ibfk_3` FOREIGN KEY (`nameidx`) REFERENCES `scopenames` (`idx`)
+) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `rawusers`
+--
+
+DROP TABLE IF EXISTS `rawusers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `rawusers` (
+  `idx` int(11) NOT NULL AUTO_INCREMENT,
+  `nameidx` int(11) NOT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `hashtype` varchar(32) DEFAULT NULL,
+  `passwordexpires` datetime DEFAULT NULL,
+  PRIMARY KEY (`idx`),
+  UNIQUE KEY `nameidx` (`nameidx`),
+  CONSTRAINT `rawusers_ibfk_1` FOREIGN KEY (`nameidx`) REFERENCES `scopenames` (`idx`)
+) ENGINE=InnoDB AUTO_INCREMENT=242 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `realizationcontainment`
+--
+
+DROP TABLE IF EXISTS `realizationcontainment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `realizationcontainment` (
+  `ridx` int(11) DEFAULT NULL,
+  `outeridx` int(11) DEFAULT NULL,
+  `inneridx` int(11) DEFAULT NULL,
+  KEY `outeridx` (`outeridx`),
+  KEY `inneridx` (`inneridx`),
+  KEY `ridx` (`ridx`),
+  CONSTRAINT `realizationcontainment_ibfk_2` FOREIGN KEY (`outeridx`) REFERENCES `resources` (`idx`),
+  CONSTRAINT `realizationcontainment_ibfk_3` FOREIGN KEY (`inneridx`) REFERENCES `resources` (`idx`),
+  CONSTRAINT `realizationcontainment_ibfk_4` FOREIGN KEY (`ridx`) REFERENCES `realizations` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `realizationcreds`
+--
+
+DROP TABLE IF EXISTS `realizationcreds`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `realizationcreds` (
+  `lidx` int(11) DEFAULT NULL,
+  `cidx` int(11) DEFAULT NULL,
+  KEY `lidx` (`lidx`),
+  KEY `cidx` (`cidx`),
+  CONSTRAINT `realizationcreds_ibfk_1` FOREIGN KEY (`lidx`) REFERENCES `realizations` (`idx`),
+  CONSTRAINT `realizationcreds_ibfk_2` FOREIGN KEY (`cidx`) REFERENCES `credentials` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `realizationperms`
+--
+
+DROP TABLE IF EXISTS `realizationperms`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `realizationperms` (
+  `ridx` int(11) DEFAULT NULL,
+  `cidx` int(11) DEFAULT NULL,
+  `permidx` int(11) DEFAULT NULL,
+  KEY `ridx` (`ridx`),
+  KEY `cidx` (`cidx`),
+  KEY `permidx` (`permidx`),
+  CONSTRAINT `realizationperms_ibfk_1` FOREIGN KEY (`ridx`) REFERENCES `realizations` (`idx`),
+  CONSTRAINT `realizationperms_ibfk_2` FOREIGN KEY (`cidx`) REFERENCES `circles` (`idx`),
+  CONSTRAINT `realizationperms_ibfk_3` FOREIGN KEY (`permidx`) REFERENCES `permissions` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `realizations`
+--
+
+DROP TABLE IF EXISTS `realizations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `realizations` (
+  `idx` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(256) DEFAULT NULL,
+  `cidx` int(11) DEFAULT NULL,
+  `eidx` int(11) DEFAULT NULL,
+  `status` varchar(256) DEFAULT 'Empty',
+  `topofile` varchar(1024) DEFAULT NULL,
+  `creator` varchar(256) DEFAULT NULL,
+  `embedder` varchar(1024) DEFAULT NULL,
+  PRIMARY KEY (`idx`),
+  UNIQUE KEY `name` (`name`),
+  KEY `cidx` (`cidx`),
+  KEY `eidx` (`eidx`),
+  CONSTRAINT `realizations_ibfk_1` FOREIGN KEY (`cidx`) REFERENCES `circles` (`idx`),
+  CONSTRAINT `realizations_ibfk_2` FOREIGN KEY (`eidx`) REFERENCES `experiments` (`idx`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `realizationtopology`
+--
+
+DROP TABLE IF EXISTS `realizationtopology`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `realizationtopology` (
+  `ridx` int(11) DEFAULT NULL,
+  `residx` int(11) DEFAULT NULL,
+  `ename` varchar(256) DEFAULT NULL,
+  KEY `ridx` (`ridx`),
+  KEY `residx` (`residx`),
+  CONSTRAINT `realizationtopology_ibfk_1` FOREIGN KEY (`ridx`) REFERENCES `realizations` (`idx`),
+  CONSTRAINT `realizationtopology_ibfk_2` FOREIGN KEY (`residx`) REFERENCES `resources` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `resourcecreds`
+--
+
+DROP TABLE IF EXISTS `resourcecreds`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `resourcecreds` (
+  `lidx` int(11) DEFAULT NULL,
+  `cidx` int(11) DEFAULT NULL,
+  KEY `cidx` (`cidx`),
+  KEY `lidx` (`lidx`),
+  CONSTRAINT `resourcecreds_ibfk_2` FOREIGN KEY (`cidx`) REFERENCES `credentials` (`idx`),
+  CONSTRAINT `resourcecreds_ibfk_3` FOREIGN KEY (`lidx`) REFERENCES `resources` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `resourceperms`
+--
+
+DROP TABLE IF EXISTS `resourceperms`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `resourceperms` (
+  `ridx` int(11) DEFAULT NULL,
+  `cidx` int(11) DEFAULT NULL,
+  `permidx` int(11) DEFAULT NULL,
+  KEY `ridx` (`ridx`),
+  KEY `cidx` (`cidx`),
+  KEY `permidx` (`permidx`),
+  CONSTRAINT `resourceperms_ibfk_1` FOREIGN KEY (`ridx`) REFERENCES `resources` (`idx`),
+  CONSTRAINT `resourceperms_ibfk_2` FOREIGN KEY (`cidx`) REFERENCES `circles` (`idx`),
+  CONSTRAINT `resourceperms_ibfk_3` FOREIGN KEY (`permidx`) REFERENCES `permissions` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `resources`
+--
+
+DROP TABLE IF EXISTS `resources`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `resources` (
+  `idx` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(256) DEFAULT NULL,
+  `type` varchar(256) DEFAULT NULL,
+  `persist` tinyint(4) DEFAULT '0',
+  `description` text,
+  `data` blob,
+  PRIMARY KEY (`idx`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=28088 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `resourcetags`
+--
+
+DROP TABLE IF EXISTS `resourcetags`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `resourcetags` (
+  `ridx` int(11) DEFAULT NULL,
+  `name` varchar(256) DEFAULT NULL,
+  `value` varchar(256) DEFAULT NULL,
+  KEY `ridx` (`ridx`),
+  CONSTRAINT `resourcetags_ibfk_1` FOREIGN KEY (`ridx`) REFERENCES `resources` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `scopenames`
+--
+
+DROP TABLE IF EXISTS `scopenames`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `scopenames` (
+  `idx` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(256) DEFAULT NULL,
+  `type` enum('user','project') DEFAULT NULL,
+  PRIMARY KEY (`idx`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=352 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `systemcreds`
+--
+
+DROP TABLE IF EXISTS `systemcreds`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `systemcreds` (
+  `lidx` int(11) DEFAULT '0',
+  `cidx` int(11) NOT NULL,
+  KEY `cidx` (`cidx`),
+  CONSTRAINT `systemcreds_ibfk_1` FOREIGN KEY (`cidx`) REFERENCES `credentials` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `userattribute`
+--
+
+DROP TABLE IF EXISTS `userattribute`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `userattribute` (
+  `idx` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) DEFAULT NULL,
+  `datatype` enum('STRING','INT','FLOAT','OPAQUE') DEFAULT NULL,
+  `optional` tinyint(4) DEFAULT NULL,
+  `access` enum('READ_WRITE','READ_ONLY','WRITE_ONLY','NO_ACCESS') DEFAULT NULL,
+  `description` text,
+  `format` varchar(256) DEFAULT NULL,
+  `formatdescription` text,
+  `sequence` int(11) NOT NULL DEFAULT '0',
+  `length` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`idx`)
+) ENGINE=InnoDB AUTO_INCREMENT=199 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `userattributevalue`
+--
+
+DROP TABLE IF EXISTS `userattributevalue`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `userattributevalue` (
+  `uidx` int(11) DEFAULT NULL,
+  `aidx` int(11) DEFAULT NULL,
+  `value` text,
+  KEY `uidx` (`uidx`),
+  KEY `aidx` (`aidx`),
+  CONSTRAINT `userattributevalue_ibfk_1` FOREIGN KEY (`uidx`) REFERENCES `rawusers` (`idx`),
+  CONSTRAINT `userattributevalue_ibfk_2` FOREIGN KEY (`aidx`) REFERENCES `userattribute` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `userchallenge`
+--
+
+DROP TABLE IF EXISTS `userchallenge`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `userchallenge` (
+  `uidx` int(11) DEFAULT NULL,
+  `data` blob,
+  `validity` datetime DEFAULT NULL,
+  `challengeid` bigint(20) DEFAULT NULL,
+  `type` varchar(20) DEFAULT NULL,
+  UNIQUE KEY `challengeid` (`challengeid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `usercreds`
+--
+
+DROP TABLE IF EXISTS `usercreds`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `usercreds` (
+  `lidx` int(11) NOT NULL,
+  `cidx` int(11) NOT NULL,
+  KEY `cidx` (`cidx`),
+  KEY `lidx` (`lidx`),
+  CONSTRAINT `usercreds_ibfk_1` FOREIGN KEY (`cidx`) REFERENCES `credentials` (`idx`),
+  CONSTRAINT `usercreds_ibfk_2` FOREIGN KEY (`lidx`) REFERENCES `rawusers` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `usernotification`
+--
+
+DROP TABLE IF EXISTS `usernotification`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `usernotification` (
+  `nidx` int(11) DEFAULT NULL,
+  `uidx` int(11) DEFAULT NULL,
+  `flags` int(11) DEFAULT NULL,
+  KEY `nidx` (`nidx`),
+  KEY `uidx` (`uidx`),
+  CONSTRAINT `usernotification_ibfk_1` FOREIGN KEY (`nidx`) REFERENCES `notification` (`idx`),
+  CONSTRAINT `usernotification_ibfk_2` FOREIGN KEY (`uidx`) REFERENCES `rawusers` (`idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Temporary view structure for view `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!50001 DROP VIEW IF EXISTS `users`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `users` AS SELECT 
+ 1 AS `idx`,
+ 1 AS `uid`,
+ 1 AS `password`,
+ 1 AS `hashtype`,
+ 1 AS `passwordexpires`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Final view structure for view `projects`
+--
+
+/*!50001 DROP VIEW IF EXISTS `projects`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`deter`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `projects` AS select `p`.`idx` AS `idx`,`s`.`name` AS `projectid`,`p`.`owneridx` AS `owneridx`,`p`.`created` AS `created`,`p`.`linkedidx` AS `linkedidx`,`p`.`flags` AS `flags` from (`rawprojects` `p` left join `scopenames` `s` on((`s`.`idx` = `p`.`nameidx`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `users`
+--
+
+/*!50001 DROP VIEW IF EXISTS `users`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`deter`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `users` AS select `u`.`idx` AS `idx`,`s`.`name` AS `uid`,`u`.`password` AS `password`,`u`.`hashtype` AS `hashtype`,`u`.`passwordexpires` AS `passwordexpires` from (`rawusers` `u` left join `scopenames` `s` on((`u`.`nameidx` = `s`.`idx`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2015-09-23 17:50:45

@@ -1,0 +1,461 @@
+<?xml version="1.0"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" >
+
+  <xsd:element name="experiment" type="topologyType"/>
+
+  <xsd:simpleType name="statusType">
+    <xsd:annotation>
+      <xsd:documentation>
+	The current state of the an element or substrate.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="empty"/>
+      <xsd:enumeration value="active"/>
+      <xsd:enumeration value="inactive"/>
+      <xsd:enumeration value="starting"/>
+      <xsd:enumeration value="terminating"/>
+      <xsd:enumeration value="failed"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:complexType name="IDType">
+    <xsd:annotation>
+      <xsd:documentation>
+	An ID is an identifier for a principal, service, or object.  This type
+	is currently polymorphic o allow different implementations of type,
+	though running code primarily uses localnames and fedids.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:choice>
+      <xsd:element name="uuid" type="xsd:base64Binary"/>
+      <xsd:element name="fedid" type="xsd:base64Binary"/>
+      <xsd:element name="uri" type="xsd:string"/>
+      <xsd:element name="localname" type="xsd:string"/>
+      <xsd:element name="kerberosUsername" type="xsd:string"/>
+    </xsd:choice>
+  </xsd:complexType>
+
+  <xsd:complexType name="attributeType">
+    <xsd:annotation>
+      <xsd:documentation>
+	A simple extension mechanism.  Most entities can have locally
+	understood attributes attached.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="attribute" type="xsd:string"/>
+      <xsd:element name="value" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:simpleType name="kindType">
+    <xsd:annotation>
+      <xsd:documentation>
+	An indication of how requested networking capacity is measured.
+	This will undoubtably expand.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="max"/>
+      <xsd:enumeration value="average"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:complexType name="capacityType">
+    <xsd:annotation>
+      <xsd:documentation>
+	A strawman network capacity description for access negotiation.
+	This will come to include more and more interesting parameters.
+	Rate in kb/s.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="rate" type="xsd:double"/>
+      <xsd:element name="kind" type="kindType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="latencyType">
+    <xsd:annotation>
+      <xsd:documentation>
+	A strawman network latency description for access negotiation.
+	This will come to include more and more interesting parameters.  Time
+	is in msec.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="time" type="xsd:double"/>
+      <xsd:element name="kind" type="kindType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:simpleType name="serviceParamTypeType">
+    <xsd:annotation>
+      <xsd:documentation>
+	The set of valid types for a service parameter
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="string"/>
+      <xsd:enumeration value="int"/>
+      <xsd:enumeration value="float"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:complexType name="serviceParamType">
+    <xsd:annotation>
+      <xsd:documentation>
+	A parameter type for a service, gives the name and parameter type
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="name" type="xsd:string"/>
+      <xsd:element name="type" type="serviceParamTypeType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="serviceType">
+    <xsd:annotation>
+      <xsd:documentation>
+	Description of a service exported from an element
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="name" type="xsd:string" />
+      <xsd:element name="importer" type="xsd:string" 
+	minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="param" type="serviceParamType" 
+	minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="description" type="xsd:string" 
+	minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="status" type="statusType" 
+	minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="substrateType">
+    <xsd:annotation>
+      <xsd:documentation>
+	Description of media through which elements can communicate
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="name" type="xsd:string"/>
+      <xsd:element name="capacity" type="capacityType" 
+	minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="latency" type="latencyType" 
+	minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="attribute" type="attributeType" 
+	minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="localname" type="xsd:string"
+	minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="status" type="statusType"
+	minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="service" type="serviceType" 
+	minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="operation" type="xsd:string" 
+	minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="cpuType">
+    <xsd:annotation>
+      <xsd:documentation>
+	The CPU requirements of a computer or other entity.  The type is a
+	string for simplicity.  We may make this more complex later.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="count" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="type" type="xsd:string"/>
+      <xsd:element name="attribute" type="attributeType" 
+	minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:simpleType name="persistenceType">
+    <xsd:annotation>
+      <xsd:documentation>
+	Description of how long storage is available
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="temporary"/>
+      <xsd:enumeration value="persistent"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:complexType name="storageType">
+    <xsd:annotation>
+      <xsd:documentation>
+	The storage requirements of a computer or other entity.  The amount and
+	its persistance.  Amounts are in megabytes.  Should media be requires,
+	an attribute can be used.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="amount" type="xsd:double"/>
+      <xsd:element name="persistence" type="persistenceType"/>
+      <xsd:element name="attribute" type="attributeType" 
+	minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="operatingsystemType">
+    <xsd:annotation>
+      <xsd:documentation>
+	The OS requirements of a computer or other element with an OS.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="name" type="xsd:string"
+	minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="version" type="xsd:string"
+	minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="distribution" type="xsd:string"
+	minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="distributionversion" type="xsd:string"
+	minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="attribute" type="attributeType" 
+	minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="softwareType">
+    <xsd:annotation>
+      <xsd:documentation>
+	An piece of software  and where to install it on an element.  Some
+	distribution types have the install location embedded in the format,
+	and for them the installation location is empty.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="location" type="xsd:string"/>
+      <xsd:element name="install" type="xsd:string"
+	minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="attribute" type="attributeType" 
+	minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="interfaceType">
+    <xsd:annotation>
+      <xsd:documentation>
+	An interface to at least one communication substrate.  Details like
+	address assignement are in attributes.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="substrate" type="xsd:string" />
+      <xsd:element name="name" type="xsd:string" />
+      <xsd:element name="capacity" type="capacityType" 
+	minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="latency" type="latencyType" 
+	minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="attribute" type="attributeType" 
+	minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="computerType">
+    <xsd:annotation>
+      <xsd:documentation>
+	A general purpose computer as part of a topology.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="name" type="xsd:string"/>
+      <xsd:element name="interface" type="interfaceType"
+	minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="attribute" type="attributeType" 
+	minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="cpu" type="cpuType"
+	minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="os" type="operatingsystemType"
+	minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="software" type="softwareType"
+	minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="storage" type="storageType"
+	minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="localname" type="xsd:string"
+	minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="status" type="statusType"
+	minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="service" type="serviceType" 
+	minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="operation" type="xsd:string" 
+	minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="testbedType">
+    <xsd:annotation>
+      <xsd:documentation>
+	A testbed is an abstract resource collection.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="name" type="xsd:string"/>
+      <xsd:element name="interface" type="interfaceType"
+	minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="attribute" type="attributeType" 
+	minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="uri" type="xsd:string"/>
+      <xsd:element name="type" type="xsd:string"/>
+      <xsd:element name="localname" type="xsd:string"
+	minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="status" type="statusType"
+	minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="service" type="serviceType" 
+	minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="operation" type="xsd:string" 
+	minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="segmentType">
+    <xsd:annotation>
+      <xsd:documentation>
+	A collection of resources instantiated on a testbed
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="name" type="xsd:string"/>
+      <xsd:element name="interface" type="interfaceType"
+	minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="attribute" type="attributeType" 
+	minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="id" type="IDType"/>
+      <xsd:element name="type" type="xsd:string"/>
+      <xsd:element name="uri" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="regionType">
+    <xsd:annotation>
+      <xsd:documentation>
+	A region that can expand into a fragment
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="name" type="xsd:string"/>
+      <xsd:element name="interface" type="interfaceType"
+	minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="attribute" type="attributeType" 
+	minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="level" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="fragname" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="otherType">
+    <xsd:annotation>
+      <xsd:documentation>
+	An element described only by attributes.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="name" type="xsd:string"/>
+      <xsd:element name="interface" type="interfaceType"
+	minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="attribute" type="attributeType" minOccurs="0"
+	maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="elementType">
+    <xsd:annotation>
+      <xsd:documentation>
+	An element in the topology to be created.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:choice>
+      <xsd:element name="computer" type="computerType"/>
+      <xsd:element name="region" type="regionType"/>
+      <xsd:element name="segment" type="segmentType"/>
+      <xsd:element name="testbed" type="testbedType"/>
+      <xsd:element name="other" type="otherType"/>
+    </xsd:choice>
+  </xsd:complexType>
+
+  <xsd:complexType name="fragmentMapType">
+    <xsd:annotation>
+      <xsd:documentation>
+	The map from region interface names to fragment element names
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="inner" type="xsd:string"/>
+      <xsd:element name="outer" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="fragmentTopologyType">
+    <xsd:annotation>
+      <xsd:documentation>
+	The topology of a fragment - elements, substrates and an ifmap
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="substrates" type="substrateType" 
+	minOccurs="0" maxOccurs="unbounded" />
+      <xsd:element name="elements" type="elementType" 
+	minOccurs="0" maxOccurs="unbounded" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="fragmentType">
+    <xsd:annotation>
+      <xsd:documentation>
+	A fragment that can replace a region
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="name" type="xsd:string"/>
+      <xsd:element name="topology" type="fragmentTopologyType"/>
+      <xsd:element name="ifmap" type="fragmentMapType"
+	minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="attribute" type="attributeType" minOccurs="0"
+	maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="nameMapType">
+    <xsd:annotation>
+      <xsd:documentation>
+	Maps a set of fragment names to global names for a region.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="pathname" type="xsd:string"/>
+      <xsd:element name="namemap" type="fragmentMapType"
+	minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="attribute" type="attributeType" minOccurs="0"
+	maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="topologyType">
+    <xsd:annotation>
+      <xsd:documentation>
+	Description of an experimental topology for the federant to create.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="version" type="xsd:string"/>
+      <xsd:element name="substrates" type="substrateType" 
+	minOccurs="0" maxOccurs="unbounded" />
+      <xsd:element name="elements" type="elementType" 
+	minOccurs="0" maxOccurs="unbounded" />
+      <xsd:element name="fragments" type="fragmentType" 
+	minOccurs="0" maxOccurs="unbounded" />
+      <xsd:element name="namemaps" type="nameMapType"
+	minOccurs="0" maxOccurs="unbounded" />
+      <xsd:element name="attribute" type="attributeType" minOccurs="0"
+	maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+</xsd:schema>

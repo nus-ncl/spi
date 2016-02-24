@@ -1,0 +1,31 @@
+Set: library($NAME)
+
+# Members of admin have all valid permissions
+library_$NAME_$PERMS <- circle_admin:admin
+
+# The owner also has all perms
+library_$NAME_$PERMS <- library_$NAME_owner
+
+# removeExperiment requires ownership or admin:admin circle membership
+library_$NAME_removeLibrary <- approved & library_$NAME_owner 
+library_$NAME_removeLibrary <- approved & circle_admin:admin
+
+# addLibraryMember and removeLibraryMember require MODIFY_LIBRARY
+library_$NAME_removeLibraryExperiments <- library_$NAME_REMOVE_EXPERIMENT
+library_$NAME_addLibraryExperiments <- library_$NAME_ADD_EXPERIMENT
+
+# changeLibraryACL requires MODIFY_LIBRARY_ACCESS permission
+library_$NAME_changeLibraryACL <- library_$NAME_MODIFY_LIBRARY_ACCESS
+
+# setOwner - owners and admins 
+library_$NAME_setOwner <- approved & library_$NAME_owner
+library_$NAME_setOwner <- approved & circle_admin:admin
+
+# Ability to look around
+library_$NAME_viewExperiments <- library_$NAME_READ_LIBRARY
+
+# getLibraryProfile: read library, OK to read profile
+library_$NAME_getLibraryProfile <- approved & library_$NAME_READ_LIBRARY
+
+# changeLibraryProfile: full modification rights imply profile rights
+library_$NAME_changeLibraryProfile <- approved & library_$NAME_ADD_EXPERIMENT & library_$NAME_REMOVE_EXPERIMENT

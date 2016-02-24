@@ -1,0 +1,16 @@
+initProps
+service/admin
+service/apiinfo
+service/circles
+service/experiments
+service/libraries
+service/projects
+service/DETERresources
+service/realizations
+service/users
+service/wsdllib
+util/regression
+build/
+doc/
+.*.swp
+tags

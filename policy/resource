@@ -1,0 +1,10 @@
+Set: resource($NAME)
+
+# Members of admin have all valid permissions
+resource_$NAME_$PERMS <- circle_admin:admin
+
+# removeExperiment requires admin:admin circle membership
+resource_$NAME_removeResource <- approved & circle_admin:admin
+
+# changeExperimentACL requires MODIFY_RESOURCE_ACCESS
+resource_$NAME_changeResourceACL <- resource_$NAME_MODIFY_RESOURCE_ACCESS

@@ -1,0 +1,92 @@
+Set: system()
+
+# Users
+#
+# createUserAttribute - approved admin user
+createUserAttribute <- approved & circle_admin:admin
+
+# createUserNoConfirm - approved admin user
+createUserNoConfirm <- approved & circle_admin:admin
+
+# modifyUserAttribute - approved admin user
+modifyUserAttribute <- approved & circle_admin:admin
+
+# removeUserAttribute - approved admin user
+removeUserAttribute <- approved & circle_admin:admin
+
+# sendNotification - approved admin user
+sendNotification <- approved & circle_admin:admin
+
+# Projects
+# createProject - per user - the right to make a project owned by that
+# user.
+# createProjectAttribute - approved admin user
+createProjectAttribute <- approved & circle_admin:admin
+
+# getProfileDescription - anyone
+# modifyProjectAttribute - approved admin user
+modifyProjectAttribute <- approved & circle_admin:admin
+
+# removeProjectAttribute - approved admin user
+removeProjectAttribute <- approved & circle_admin:admin
+
+# Circles
+# createCircleAttribute - approved admin user
+createCircleAttribute <- approved & circle_admin:admin
+
+# getProfileDescription - anyone
+# modifyCircleAttribute - approved admin user
+modifyCircleAttribute <- approved & circle_admin:admin
+
+# removeCircleAttribute - approved admin user
+removeCircleAttribute <- approved & circle_admin:admin
+
+# Experiments
+# createExperimentAttribute - approved admin user
+createExperimentAttribute <- approved & circle_admin:admin
+
+# getProfileDescription - anyone
+# modifyExperimentAttribute - approved admin user
+modifyExperimentAttribute <- approved & circle_admin:admin
+
+# removeExperimentAttribute - approved admin user
+removeExperimentAttribute <- approved & circle_admin:admin
+
+
+# Libraries
+# createLibraryAttribute - approved admin user
+createLibraryAttribute <- approved & circle_admin:admin
+
+# getProfileDescription - anyone
+# modifyLibraryAttribute - approved admin user
+modifyLibraryAttribute <- approved & circle_admin:admin
+
+# removeLibraryAttribute - approved admin user
+removeLibraryAttribute <- approved & circle_admin:admin
+
+
+# Admin
+
+# resetAccessControl - approved admin
+resetAccessControl <- approved & circle_admin:admin
+
+# clearCredentialCache - approved admin
+clearCredentialCache <- approved & circle_admin:admin
+
+# getTimerValues - approved admin
+getTimerValues <- approved & circle_admin:admin
+
+# removeTimers - approved admin
+removeTimers <- approved & circle_admin:admin
+
+# addPermission - approved admin
+addPermission <- approved & circle_admin:admin
+
+# removePermission - approved admin
+removePermission <- approved & circle_admin:admin
+
+# admins can view all projects
+user_admin:admin_viewProjects <- approved & circle_admin:admin
+
+# admins can view all circles
+user_admin:admin_viewCircles <- approved & circle_admin:admin

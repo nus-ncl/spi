@@ -1,0 +1,28 @@
+Set: experiment($NAME)
+
+# Members of admin have all valid permissions
+experiment_$NAME_$PERMS <- circle_admin:admin
+
+# The owner also has all perms
+experiment_$NAME_$PERMS <- experiment_$NAME_owner
+
+# removeExperiment requires ownership or admin:admin circle membership
+experiment_$NAME_removeExperiment <- approved & experiment_$NAME_owner 
+experiment_$NAME_removeExperiment <- approved & circle_admin:admin
+
+# addExperimentAspects and removeExperimentAspects require MODIFY_EXPERIMENT
+experiment_$NAME_removeExperimentAspects <- experiment_$NAME_MODIFY_EXPERIMENT
+experiment_$NAME_addExperimentAspects <- experiment_$NAME_MODIFY_EXPERIMENT
+experiment_$NAME_changeExperimentAspects <- experiment_$NAME_MODIFY_EXPERIMENT
+
+# changeExperimentACL requires MODIFY_EXPERIMENT_ACCESS
+experiment_$NAME_changeExperimentACL <- experiment_$NAME_MODIFY_EXPERIMENT_ACCESS
+
+# setOwner - owners and admins 
+experiment_$NAME_setOwner <- approved & experiment_$NAME_owner
+experiment_$NAME_setOwner <- approved & circle_admin:admin
+
+# getExperimentProfile: read experiment implies read profile
+experiment_$NAME_getExperimentProfile <- approved & experiment_$NAME_READ_EXPERIMENT
+# getExperimentProfile: modify experiment implies modify profile
+experiment_$NAME_changeExperimentProfile <- approved & experiment_$NAME_MODIFY_EXPERIMENT

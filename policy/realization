@@ -1,0 +1,17 @@
+Set: realization($NAME)
+
+# Members of admin have all valid permissions
+realization_$NAME_$PERMS <- circle_admin:admin
+
+# removRealization requires admin:admin circle membership
+realization_$NAME_removeRealization <- approved & circle_admin:admin
+realization_$NAME_removeRealization <- approved & realization_$NAME_REMOVE_REALIZATION
+realization_$NAME_removeRealization <- approved & realization_$NAME_owner
+
+realization_$NAME_releaseRealization <- approved & circle_admin:admin
+realization_$NAME_releaseRealization <- approved & realization_$NAME_REMOVE_REALIZATION
+realization_$NAME_releaseRealization <- approved & realization_$NAME_owner
+
+# changeRealizationACL requires MODIFY_REALIZATION_ACCESS
+realization_$NAME_changeRealizationACL <- realization_$NAME_MODIFY_RESOURCE_ACCESS
+realization_$NAME_changeRealizationACL <- approved & realization_$NAME_owner

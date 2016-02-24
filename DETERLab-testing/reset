@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# These users will be in the admin project
+ADMINUSERS="spiuidev faber"
+
+FOLLOWUP=${1:-None}
+
+/home/spidev/src/testbed/DeterAPI/util/bin/util EmptyDeterDatabase > /dev/null
+sudo rm -rf /usr/local/etc/deter/experiments/*
+BOOTSTRAP=`/home/spidev/src/testbed/DeterAPI/util/bin/util Bootstrap 2>&1`
+echo $BOOTSTRAP
+PWD=`echo $BOOTSTRAP | sed -e 's/^[^ ]* //'`
+/home/spidev/src/testbed/DeterAPI/util/bin/util EmulabToDeter --pass "$PWD" $ADMINUSERS > /dev/null
+
+if [ -x "$FOLLOWUP" ]; then
+	$FOLLOWUP
+fi

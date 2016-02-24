@@ -1,0 +1,45 @@
+#!/bin/sh
+
+# The directory that contains the Descartes source and compiled utilities.
+if [ -z "$DESCARTES_HOME" ]; then
+	DESCARTES_HOME="."
+fi
+
+# Projects that are imported from the Emulab tbdb database.  Each should be
+# introduced by --proj
+if [ -z "$DESCARTES_PROJECTS" ]; then
+	DESCARTES_PROJECTS="--proj emulab-ops --proj spidev"
+fi
+
+# Restrictions on the resources imported from the tbdb.  The nodes connected
+# to a given switch are imported.  Each switch should be introduced by the 
+# --switch parameter, and each is a regular expression.
+if [ -z "$DESCARTES_SWITCHES" ]; then
+	DESCARTES_SWITCHES="--switch HPS10.*"
+fi
+
+# The service configuration directory
+if [ -z "$DESCARTES_ETC" ] ; then
+	DESCARTES_ETC="/usr/local/etc/deter/"
+fi
+
+# These users are added to the admin group.  Introduce each user with --admin
+if [ -z "$DESCARTES_ADMINUSERS" ]; then
+	DESCARTES_ADMINUSERS="--admin jaipuria"
+fi
+
+# The first command line parameter is a script to run after initialization is
+# complete.
+DESCARTES_FOLLOWUP=${1:-None}
+
+$DESCARTES_HOME/util/bin/util EmptyDeterDatabase > /dev/null
+sudo rm -rf $DESCARTES_ETC/experiments/*
+sudo rm -rf $DESCARTES_ETC/realizations/*
+BOOTSTRAP=`$DESCARTES_HOME/util/bin/util Bootstrap 2>&1`
+echo $BOOTSTRAP
+PWD=`echo $BOOTSTRAP | sed -e 's/^[^ ]* //'`
+$DESCARTES_HOME/util/bin/util EmulabToDeter --pass "$PWD" $DESCARTES_ADMINUSERS $DESCARTES_SWITCHES $DESCARTES_PROJECTS
+
+if [ -x "$DESCARTES_FOLLOWUP" ]; then
+	$DESCARTES_FOLLOWUP
+fi

@@ -1,0 +1,148 @@
+<serviceGroup>
+  <service name="Admin" scope="application" targetNamespace="http://api.testbed.deterlab.net/">
+    <description>
+        Administartive operations on the testbed
+      </description>
+    <transports>
+	  <transport>https</transport>
+    </transports>
+    <messageReceivers>
+        <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-only"
+                         class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver"/>
+        <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out"
+                         class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+    </messageReceivers>
+    <schema schemaNamespace="http://api.testbed.deterlab.net/xsd"/>
+    <parameter name="ServiceClass">net.deterlab.testbed.api.Admin</parameter>
+</service>
+  <service name="ApiInfo" scope="application" targetNamespace="http://api.testbed.deterlab.net/">
+    <description>
+        Return information about the running version of the DETER API
+      </description>
+    <transports> 
+	  <transport>https</transport>
+    </transports>
+    <messageReceivers>
+        <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-only"
+                         class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver"/>
+        <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out"
+                         class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+    </messageReceivers>
+    <schema schemaNamespace="http://api.testbed.deterlab.net/xsd"/>
+    <parameter name="ServiceClass">net.deterlab.testbed.api.ApiInfo</parameter>
+</service>
+<service name="Circles" scope="application" targetNamespace="http://api.testbed.deterlab/net/">
+    <description>
+      Manipulate user groupings (Circles) used for access control and
+      collaboration.
+    </description>
+    <transports> 
+	  <transport>https</transport>
+    </transports>
+    <messageReceivers>
+        <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-only"
+                         class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver"/>
+        <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out"
+                         class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+    </messageReceivers>
+    <schema schemaNamespace="http://api.testbed.deterlab.net/xsd"/>
+    <parameter name="ServiceClass">net.deterlab.testbed.api.Circles</parameter>
+</service>
+<service name="Experiments" scope="application" targetNamespace="http://api.testbed.deterlab/net/">
+    <description>
+      Manipulate saved experiments.
+    </description>
+    <transports>
+	  <transport>https</transport>
+    </transports>
+    <messageReceivers>
+        <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-only"
+                         class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver"/>
+        <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out"
+                         class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+    </messageReceivers>
+    <schema schemaNamespace="http://api.testbed.deterlab.net/xsd"/>
+    <parameter name="ServiceClass">net.deterlab.testbed.api.Experiments</parameter>
+</service>
+<service name="Libraries" scope="application" targetNamespace="http://api.testbed.deterlab/net/">
+    <description>
+      Manipulate experiment libraries.
+    </description>
+    <transports>
+	  <transport>https</transport>
+    </transports>
+    <messageReceivers>
+        <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-only"
+                         class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver"/>
+        <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out"
+                         class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+    </messageReceivers>
+    <schema schemaNamespace="http://api.testbed.deterlab.net/xsd"/>
+    <parameter name="ServiceClass">net.deterlab.testbed.api.Libraries</parameter>
+</service>
+<service name="Projects" scope="application" targetNamespace="http://api.testbed.deterlab/net/">
+    <description>
+      Manipulate user groupings (Projects) used for user vetting/access to the
+      testbed.
+    </description>
+    <transports> 
+	  <transport>https</transport>
+    </transports>
+    <messageReceivers>
+        <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-only"
+                         class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver"/>
+        <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out"
+                         class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+    </messageReceivers>
+    <schema schemaNamespace="http://api.testbed.deterlab.net/xsd"/>
+    <parameter name="ServiceClass">net.deterlab.testbed.api.Projects</parameter>
+</service>
+<service name="Realizations" scope="application" targetNamespace="http://api.testbed.deterlab/net/">
+    <description>
+      Manipulate experiment realizations.
+    </description>
+    <transports>
+	  <transport>https</transport>
+    </transports>
+    <messageReceivers>
+        <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-only"
+                         class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver"/>
+        <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out"
+                         class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+    </messageReceivers>
+    <schema schemaNamespace="http://api.testbed.deterlab.net/xsd"/>
+    <parameter name="ServiceClass">net.deterlab.testbed.api.Realizations</parameter>
+</service>
+<service name="Resources" scope="application" targetNamespace="http://api.testbed.deterlab/net/">
+    <description>
+      Manipulate testbed resources used for describing experiment realizations.
+    </description>
+    <transports>
+	  <transport>https</transport>
+    </transports>
+    <messageReceivers>
+        <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-only"
+                         class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver"/>
+        <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out"
+                         class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+    </messageReceivers>
+    <schema schemaNamespace="http://api.testbed.deterlab.net/xsd"/>
+    <parameter name="ServiceClass">net.deterlab.testbed.api.Resources</parameter>
+</service>
+<service name="Users" scope="application" targetNamespace="http://api.testbed.deterlab/net/">
+    <description>
+        Return information about user profiles
+      </description>
+    <transports>
+	  <transport>https</transport>
+    </transports>
+    <messageReceivers>
+        <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-only"
+                         class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver"/>
+        <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out"
+                         class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+    </messageReceivers>
+    <schema schemaNamespace="http://api.testbed.deterlab.net/xsd"/>
+    <parameter name="ServiceClass">net.deterlab.testbed.api.Users</parameter>
+</service>
+</serviceGroup>

@@ -1,0 +1,59 @@
+#!/usr/local/bin/bash
+
+
+# Constructs an index.html that lists the contents of $2 in the $1 root.
+# Installs the index in $1/$2.
+function mkindex () {
+
+	mkdir -p /tmp/faber$$
+	# Header
+	cat > /tmp/faber$$/index.html <<EOF
+<html>
+<body>
+<ul>
+EOF
+	# Convert a director listing into list items by removing the paths.
+	for f in `ls $1/$2`; do
+		base=`basename $f`
+		echo "<li><a href=\"$base\">$base</a></li>"
+	done >> /tmp/faber$$/index.html
+	# trailer
+	cat >> /tmp/faber$$/index.html <<EOF
+</ul>
+</body>
+</html>
+EOF
+	chmod 644 /tmp/faber$$/index.html
+	mv /tmp/faber$$/index.html $1/$2
+	rm -rf /tmp/faber$$
+}
+
+
+dest=${1:-$HOME/public_html/DeterSPI-dev}
+
+# Save the old in case of disaster
+if [ -d $dest ]; then
+	mv $dest $dest.hold
+fi
+
+mkdir -p $dest
+chmod 755 $dest
+
+# These are just directory copies
+tar -C util -cf - regression | tar -C $dest -xf -
+tar -C . -cf - xsd | tar -C $dest -xf -
+tar -C service -cf - doc | tar -C $dest -xf -
+
+# Collect all the wsdl in one directory and save it
+mkdir -p /tmp/faber$$/wsdl
+find . -name \*.wsdl -exec cp {} /tmp/faber$$/wsdl \;
+tar -C /tmp/faber$$ -cf - wsdl | tar -C $dest -xf -
+rm -rf /tmp/faber$$
+
+# Indices - regression and doc have indices.
+mkindex $dest ""
+mkindex $dest "wsdl"
+mkindex $dest "xsd"
+
+# All good, out with the old
+rm -rf $dest.hold

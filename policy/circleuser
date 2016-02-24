@@ -1,0 +1,5 @@
+Set: user($UID)
+Set: circlemembers($NAME)
+
+circle_$NAME <- user_$UID
+circle_$NAME_$PERMS <- user_$UID

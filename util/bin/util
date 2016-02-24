@@ -1,0 +1,10 @@
+#!/bin/sh
+
+md=`dirname $0`
+jar="$md/../build/jar/util.jar"
+
+if [ -e "$jar" ]; then
+	java $UTIL_JAVA_OPTS -jar "$jar" "$@"
+else
+	echo $jar does not exist\; Make it
+fi

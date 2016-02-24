@@ -1,0 +1,4 @@
+Set: resource($NAME)
+Set: circle($UID)
+
+resource_$NAME_$PERMS <- circle_$UID

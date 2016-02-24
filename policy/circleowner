@@ -1,0 +1,4 @@
+Set: user($UID)
+Set: circleowner($NAME)
+
+circle_$NAME_owner <- user_$UID

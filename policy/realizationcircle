@@ -1,0 +1,4 @@
+Set: realization($NAME)
+Set: circle($UID)
+
+realization_$NAME_$PERMS <- circle_$UID

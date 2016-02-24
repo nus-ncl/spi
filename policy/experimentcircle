@@ -1,0 +1,4 @@
+Set: experiment($NAME)
+Set: circle($UID)
+
+experiment_$NAME_$PERMS <- circle_$UID

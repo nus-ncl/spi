@@ -1,0 +1,4 @@
+Set: library($NAME)
+Set: circle($UID)
+
+library_$NAME_$PERMS <- circle_$UID

@@ -1,0 +1,7 @@
+#!/bin/sh
+./util/bin/util SetProperty \
+        serviceurl https://localhost:52323/axis2/services/ \
+        trustfilename $HOME/keystore \
+        trustpw changeit \
+        useridfilename $HOME/myID \
+        useridpw changeit 

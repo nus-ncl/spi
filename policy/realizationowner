@@ -1,0 +1,4 @@
+Set: user($UID)
+Set: realization($NAME)
+
+realization_$NAME_owner <- user_$UID

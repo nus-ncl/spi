@@ -1,0 +1,8 @@
+layout net.deterlab.testbed.experiment.LayoutAspect
+orchestration net.deterlab.testbed.experiment.OrchestrationAspect
+visualization net.deterlab.testbed.experiment.VisualizationAspect
+procedure net.deterlab.testbed.experiment.UnimplementedAspect
+dataflow net.deterlab.testbed.experiment.UnimplementedAspect
+constraints net.deterlab.testbed.experiment.UnimplementedAspect
+embedder net.deterlab.testbed.experiment.EmbedderAspect
+* net.deterlab.testbed.experiment.DefaultAspect

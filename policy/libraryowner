@@ -1,0 +1,4 @@
+Set: user($UID)
+Set: library($NAME)
+
+library_$NAME_owner <- user_$UID

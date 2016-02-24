@@ -1,0 +1,52 @@
+#!/bin/sh
+./util/bin/util SetProperty --file /usr/local/etc/deter/service.properties \
+	deterDbUrl 'jdbc:mysql://localhost/deter?user=deter&password=deter' \
+	emulabDbUrl 'jdbc:mysql://localhost/tbdb?user=deter&password=deter' \
+	keystorefilename /usr/local/apache-tomcat-7.0/conf/tomcat.keystore \
+	keystorepw changeit \
+	ServerCertFile /usr/local/etc/deter/cert.pem \
+	supportEmail 'testbed-ops@deterlab.net' \
+	mailer=/home/spidev/src/testbed/DeterAPI/util/e-in-e_mail.pl \
+	testbedUrl=https\://boss.minibed.deterlab.net\:3069/usr/testbed \
+	xmlrpcTrust=/usr/local/etc/deter/trusted.jks \
+	defaultEmbedder=net.deterlab.testbed.embedding.DeterLabXmlRpcEmbedder \
+	embedderClasses=/usr/local/share/java/classes\:/usr/local/lib/deter/ \
+	SystemProjects admin,system,regression \
+	WorldCircle system\:world \
+	logconfig /usr/local/etc/deter/log4j.properties \
+	experiment_root /usr/local/etc/deter/experiments \
+	realization_root /usr/local/etc/deter/realizations \
+	circlePolicy /usr/local/etc/deter/policy/circle \
+	circleOwnerPolicy /usr/local/etc/deter/policy/circleowner \
+	circleUserPolicy /usr/local/etc/deter/policy/circleuser \
+	circleUserRemovePolicy /usr/local/etc/deter/policy/circleuserremove \
+	circleRemovePolicy /usr/local/etc/deter/policy/circleremove1,/usr/local/etc/deter/policy/circleremove2 \
+	projectPolicy /usr/local/etc/deter/policy/project \
+	projectOwnerPolicy /usr/local/etc/deter/policy/projectowner \
+	projectUserPolicy /usr/local/etc/deter/policy/projectuser \
+	projectOwnerApprovedPolicy /usr/local/etc/deter/policy/projectownerapproved \
+	projectUserApprovedPolicy /usr/local/etc/deter/policy/projectuserapproved \
+	projectUserRemovePolicy /usr/local/etc/deter/policy/projectuserremove \
+	projectRemovePolicy /usr/local/etc/deter/policy/projectremove1,/usr/local/etc/deter/policy/projectremove2 \
+	systemPolicy /usr/local/etc/deter/policy/system \
+	userPolicy /usr/local/etc/deter/policy/user \
+	userLoginPolicy /usr/local/etc/deter/policy/userlogin \
+	userLogoutPolicy /usr/local/etc/deter/policy/userlogout \
+	userRemovePolicy /usr/local/etc/deter/policy/userremove \
+	experimentPolicy /usr/local/etc/deter/policy/experiment \
+	experimentCirclePolicy /usr/local/etc/deter/policy/experimentcircle \
+	experimentOwnerPolicy /usr/local/etc/deter/policy/experimentowner \
+	experimentRemovePolicy /usr/local/etc/deter/policy/experimentremove \
+	resourcePolicy /usr/local/etc/deter/policy/resource \
+	resourceCirclePolicy /usr/local/etc/deter/policy/resourcecircle \
+	realizationOwnerPolicy /usr/local/etc/deter/policy/realizationowner \
+	resourceRemovePolicy /usr/local/etc/deter/policy/resourceremove \
+	realizationPolicy /usr/local/etc/deter/policy/realization \
+	realizationCirclePolicy /usr/local/etc/deter/policy/realizationcircle \
+	realizationRemovePolicy /usr/local/etc/deter/policy/realizationremove \
+	libraryPolicy /usr/local/etc/deter/policy/library \
+	libraryCirclePolicy /usr/local/etc/deter/policy/librarycircle \
+	libraryOwnerPolicy /usr/local/etc/deter/policy/libraryowner \
+	libraryRemovePolicy /usr/local/etc/deter/policy/libraryremove \
+	aspectClassFile /usr/local/etc/deter/AspectClasses
+	

@@ -1,0 +1,70 @@
+Set: project($NAME)
+
+# Members of admin have all valid permissions for all projects
+project_$NAME_$PERMS <- project_admin
+
+# Create a credential stating that this user can create circles in
+# this project if they are approved and have CREATE_CIRCLE.
+project_$NAME_createCircle <- approved & project_$NAME_CREATE_CIRCLE
+
+# Create a credential stating that this user can create circles in
+# this project if they are approved and have CREATE_EXPERIMENT
+project_$NAME_createExperiment <- approved & project_$NAME_CREATE_EXPERIMENT
+
+# Create a credential stating that this user can create circles in
+# this project if they are approved and have CREATE_LIBRARY
+project_$NAME_createLibrary <- approved & project_$NAME_CREATE_LIBRARY
+
+# Create a credential stating that this user can create circles in
+# this project if they are approved and have CREATE_LIBRARY
+project_$NAME_createResource <- approved & project_$NAME_CREATE_RESOURCE
+
+# adduserConfirm requires only a existing user - the user may be
+# joining their first project
+project_$NAME_addUserConfirm <- user
+
+# addUsers - approved user with ADD_USER permission
+project_$NAME_addUsers <- approved & project_$NAME_ADD_USER
+
+# addUsersNoConfirm - only admins
+project_$NAME_addUsersNoConfirm <- approved & project_admin
+
+# approveProject - only admins
+project_$NAME_approveProject <- approved & project_admin
+
+# changeProjectProfile - owner and admins
+project_$NAME_changeProjectProfile <- approved & project_$NAME_owner
+project_$NAME_changeProjectProfile <- approved & project_admin
+
+# changePermissions -- ADD_USER and REMOVE_USER
+project_$NAME_changePermissions <- approved & project_$NAME_ADD_USER & project_$NAME_REMOVE_USER
+
+# createProject is not per-project
+# createProjectAttribute is not per-project
+# getProjectProfile - approved user
+project_$NAME_getProjectProfile <- approved
+
+# getProfileDescription - approved user
+project_$NAME_getProfileDescription <- approved
+
+# joinProject - is per user - we check the right to join this user to
+# any project.
+# joinProjectConfirm - ADD_USER
+project_$NAME_joinProjectConfirm <- project_$NAME_ADD_USER
+
+# modifyProjectAttribute is not per-project
+
+# removeProject - owner and admin
+project_$NAME_removeProject <- approved & project_$NAME_owner
+project_$NAME_removeProject <- approved & project_admin
+
+# removeProjectAttribute is not per-project
+# removeUsers - REMOVE_USER
+project_$NAME_removeUsers <- approved & project_$NAME_REMOVE_USER
+
+# setOwner - owners and admins 
+project_$NAME_setOwner <- approved & project_$NAME_owner
+project_$NAME_setOwner <- approved & project_admin
+
+#viewProjects - approved user
+project_$NAME_viewProjects <- approved

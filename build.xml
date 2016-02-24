@@ -1,0 +1,110 @@
+<!--
+
+    This controls building the DeterAPI web service, and a tomcat plugin to
+    allow self-signed client certificates to access the web service.
+
+    Targets are:
+
+    compile.service: compiles the service into build/classes
+    generate.wsdl: generates the wsdl description for the service
+    generate.service: makes the aar file for the service
+    install.service: copies the services aar file into the local tomcat webapps
+	directory.  Tomcat usually needs to be restarted at this point.
+    doc: produce javadoc for public interfaces
+    dev-doc: produce javadoc for all interfaces
+    clean: obliterate build, doc and dev-doc
+
+    This began as a sample build file from axis2 and is being modified pretty
+    heavily.
+-->
+<project name="DeterAPIRoot" default="all">
+
+  <!-- directory with the service it it -->
+  <property name="service.dir" value="service" />
+  <!-- The root utility dir -->
+  <property name="util.dir" value="util" />
+  <!-- database format -->
+  <property name="db.format" value="db/format.mysql"/>
+  <!-- config dir -->
+  <property name="config.dir" value="/usr/local/etc/deter"/>
+  <!-- policy dir -->
+  <property name="policy.dir" value="./policy"/>
+  <!-- aspects configuration dir -->
+  <property name="aspects.dir" value="./aspects"/>
+
+  <!-- Use the service build commands to generate the aar -->
+  <target name="generate.service" >
+    <ant dir="${service.dir}" target="generate.service"/>
+  </target>
+
+  <!-- Use the service build commands to install the aar if filesystem
+       permissions permit -->
+  <target name="install.service">
+    <copy todir="${config.dir}/policy">
+      <fileset dir="${policy.dir}">
+	<include name="**/*"/>
+	<exclude name="**/.*"/>
+      </fileset>
+    </copy>
+    <copy todir="${config.dir}">
+      <fileset dir="${aspects.dir}">
+	<include name="**/*"/>
+	<exclude name="**/.*"/>
+      </fileset>
+    </copy>
+    <ant dir="${service.dir}" target="install.service"/>
+  </target>
+
+  <!-- Use the service build commands to generate the jar -->
+  <target name="generate.service.jar">
+    <ant dir="${service.dir}" target="generate.jar"/>
+  </target>
+
+  <!-- Use the service build commands to generate the access jars -->
+  <target name="generate.access">
+    <ant dir="${service.dir}" target="generate.access"/>
+  </target>
+
+  <!-- Use the service build commands to generate the javadocs -->
+  <target name="generate.doc">
+    <ant dir="${service.dir}" target="doc"/>
+  </target>
+
+  <!-- Use the util build commands to generate the runnable util jar -->
+  <target name="generate.util" depends="generate.access,generate.service.jar" >
+    <ant dir="${util.dir}" target="generate.jar"/>
+  </target>
+
+  <!-- clean the services directory -->
+  <target name="clean.service">
+    <ant dir="${service.dir}" target="clean"/>
+  </target>
+
+  <!-- clean the util directory -->
+  <target name="clean.util">
+    <ant dir="${util.dir}" target="clean"/>
+  </target>
+
+  <!-- copy the db format -->
+  <target name="db-format">
+    <exec executable="mysqldump" output="${db.format}">
+      <arg value="--user"/>
+      <arg value="deter"/>
+      <arg value="--password"/>
+      <arg value="--no-data"/>
+      <arg value="deter"/>
+    </exec>
+    <echo message="Database format stored to ${db.format}"/>
+  </target>
+
+  <!-- clean everything (meta target) -->
+  <target name="clean" depends="clean.service,clean.util"/>
+
+  <!-- build everything (meta target and default) -->
+  <target name="all" depends="generate.util,generate.doc"/>
+
+  <!-- run regressions -->
+  <target name="regression-test" depends="generate.util">
+    <ant dir="${util.dir}" target="regression-test"/>
+  </target>
+</project>

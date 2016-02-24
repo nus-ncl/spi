@@ -1,0 +1,4 @@
+Set: user($UID)
+Set: experiment($NAME)
+
+experiment_$NAME_owner <- user_$UID

@@ -1,0 +1,52 @@
+Set: circle($NAME)
+
+# Members of admin have all valid permissions
+circle_$NAME_$PERMS <- circle:admin:admin
+
+# addUserConfirm requires only a approved user
+circle_$NAME_addUserConfirm <- approved
+
+# addUsers - approved user with ADD_USER permission
+circle_$NAME_addUsers <- approved & circle_$NAME_ADD_USER
+
+# addUsersNoConfirm - only admins
+circle_$NAME_addUsersNoConfirm <- approved & circle_admin:admin
+
+# changeCircleProfile - owner and admins
+circle_$NAME_changeCircleProfile <- approved & circle_admin:admin
+circle_$NAME_changeCircleProfile <- approved & circle_$NAME_owner
+
+# changePermissions -- ADD_USER and REMOVE_USER
+circle_$NAME_changePermissions <- approved & circle_$NAME_ADD_USER & circle_$NAME_REMOVE_USER
+
+# createCircle is not per-circle
+
+# createCircleAttribute is not per-circle
+
+# getCircleProfile - approved circle member
+circle_$NAME_getCircleProfile <- approved & circle_$NAME
+
+# getProfileDescription - approved user
+circle_$NAME_getProfileDescription <- approved
+
+# joinCircle - per-user "can I issue a join for this user?"
+# joinCircleConfirm - ADD_USER
+circle_$NAME_joinCircleConfirm <- approved & circle_$NAME_ADD_USER
+
+# modifyCircleAttribute is not per-circle
+
+# removeCircle - owner or admin
+circle_$NAME_removeCircle <- approved & circle_$NAME_owner
+circle_$NAME_removeCircle <- approved & circle_admin:admin
+
+# removeCircleAttribute is not per-circle
+
+# removeUsers - REMOVE_USER
+circle_$NAME_removeUsers <- approved & circle_$NAME_REMOVE_USER
+
+# setOwner - owners and admins 
+circle_$NAME_setOwner <- approved & circle_$NAME_owner
+circle_$NAME_setOwner <- approved & circle_admin:admin
+
+#viewCircles - approved user
+circle_$NAME_viewCircles <- approved 

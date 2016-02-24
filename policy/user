@@ -1,0 +1,80 @@
+Set: user($UID)
+
+# Create a credential stating that this user exists.
+user <- user_$UID
+
+# Create a credential stating that this user can create circles in its
+# own namespace, once approved and that admins can do so
+user_$UID_createCircle <- approved & user_$UID
+user_$UID_createCircle <- approved & circle_admin:admin
+
+# Create a credential stating that this user can create experiments in its
+# own namespace, once approved and that admins can do so
+user_$UID_createExperiment <- approved & user_$UID
+user_$UID_createExperiment <- approved & circle_admin:admin
+
+# Create a credential stating that this user can create libraries in its
+# own namespace, once approved and that admins can do so
+user_$UID_createLibrary <- approved & user_$UID
+user_$UID_createLibrary <- approved & circle_admin:admin
+
+# Create a credential stating that this user can create resources in its
+# own namespace, once approved and that admins can do so
+user_$UID_createResource <- approved & user_$UID
+user_$UID_createResource <- approved & circle_admin:admin
+
+# challengeResponse requires nothing - logging in.
+# changePassword - must be this user
+user_$UID_changePassword <- user_$UID
+user_$UID_changePassword <- approved & circle_admin:admin
+
+# changePasswordChallenge requires nothing
+# changeUserProfile - be this user or an admin
+user_$UID_changeUserProfile <- user_$UID
+user_$UID_changeUserProfile <- approved & circle_admin:admin
+
+# createUser - not per-user
+# createUserAttribute - not per-user
+# createUserNoConfirm - not per-user
+# getNotifications - be this user
+user_$UID_getNotifications <- user_$UID
+
+# getProfileDescription - not per-user
+# getUserProfile - be an approved user
+user_$UID_getUserProfile <- approved
+
+# markNotifications - this user or admin
+user_$UID_markNotifications <- user_$UID
+user_$UID_markNotifications <- approved & circle_admin:admin
+
+# modifyUserAttribute - not per-user
+# removeUser - be this user or an admin
+user_$UID_removeUser <- user_$UID
+user_$UID_removeUser <- approved & circle_admin:admin
+
+# removeUserAttribute - not per-user
+# requestChallenge - anyone
+# requestPasswordReset - anyone
+# sendNotification - not per-user
+# createProject, viewProjects, viewExperiments, viewLibraries and viewCircle
+# are essentially per-user (and admin works, too).
+
+user_$UID_viewProjects <- user_$UID
+user_$UID_viewProjects <- approved & circle_admin:admin
+
+user_$UID_viewCircles <- user_$UID
+user_$UID_viewCircles <- approved & circle_admin:admin
+
+user_$UID_viewExperiments <- user_$UID
+user_$UID_viewExperiments <- approved & circle_admin:admin
+
+user_$UID_viewLibraries <- user_$UID
+user_$UID_viewLibraries <- approved & circle_admin:admin
+
+user_$UID_createProject <- user_$UID
+user_$UID_createProject <- approved & circle_admin:admin
+# joinProject is per user.
+user_$UID_joinProject <- user_$UID
+
+# joinCircle is per user.
+user_$UID_joinCircle <- user_$UID

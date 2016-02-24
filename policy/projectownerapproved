@@ -1,0 +1,14 @@
+Set: user($UID)
+Set: projectmembers($NAME)
+
+# Project membership
+project_$NAME <- user_$UID
+
+# Permissions
+project_$NAME_$PERMS <- user_$UID
+
+#ownership
+project_$NAME_owner <- user_$UID
+
+# approval
+approved <- project_$NAME
