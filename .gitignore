@@ -15,3 +15,7 @@ doc/
 .*.swp
 tags
 .gradle/
+bin/
+.settings/
+.classpath
+.project
