@@ -1,5 +1,6 @@
 rootProject.name = 'spi'
 
-include "${rootProject.name}-service"
+include "${rootProject.name}-service", "${rootProject.name}-util"
 
 project(":${rootProject.name}-service").projectDir=file('service')
+project(":${rootProject.name}-util").projectDir=file('util')
