@@ -1,0 +1,5 @@
+rootProject.name = 'spi'
+
+include "${rootProject.name}-service"
+
+project(":${rootProject.name}-service").projectDir=file('service')
