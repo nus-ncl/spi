@@ -26,3 +26,8 @@ bin/
 .settings/
 .classpath
 .project
+
+# Idea artifacts
+.idea
+*.iml
+*.ipr
