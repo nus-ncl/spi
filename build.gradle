@@ -1,6 +1,6 @@
 plugins {
-	id 'eclipse'
-	id 'idea'
+    id 'eclipse'
+    id 'idea'
 }
 
 ant.importBuild 'build.xml'
