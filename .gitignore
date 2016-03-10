@@ -14,7 +14,11 @@ build/
 doc/
 .*.swp
 tags
+
+# Gradle artifacts
 .gradle/
+
+# Eclipse artifacts
 bin/
 .settings/
 .classpath
