@@ -15,6 +15,9 @@ doc/
 .*.swp
 tags
 
+# Java artifacts
+*.class
+
 # Gradle artifacts
 .gradle/
 
