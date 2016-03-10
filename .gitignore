@@ -23,6 +23,7 @@ tags
 
 # Eclipse artifacts
 bin/
+!util/bin
 .settings/
 .classpath
 .project
