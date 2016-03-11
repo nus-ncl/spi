@@ -492,34 +492,37 @@ public class CredentialStoreDB extends DBObject {
      * @throws DeterFault if there is an error
      */
     public void loadContext(Context c, Collection<CredentialSet> sets) 
-	throws DeterFault {
-	expireCredentials();
-	//CredentialFactory cf = c.getCredentialFactory();
-	Pattern rule = Pattern.compile("([\\w\\.]+)\\s*<-+\\s*(.+)");
-
-	Collection <String> cstr = findCredentialsUnion(sets, "cred");
-	for (String cs: cstr ) {
-	    Credential[] creds = credCache.get(cs);
-	    if ( creds == null ) {
-		/*try {
-		    creds = cf.parseCredential(cs, c.identities());
-		}
-		catch (ABACException e) {
-		    continue;
-		}*/
-    	
-	    Matcher rm = rule.matcher(cs);
-	    if (rm.find()) {
-	    	Credential cred = new InternalCredential(new Role(rm.group(1)), 
-				    								new Role(rm.group(2)));
-	    	creds = new Credential[]{cred};
-	    }
-		if (creds == null) continue;
-		credCache.put(cs, creds);
-	    }
-	    for (Credential cr: creds)
-		c.load_attribute_chunk(cr);
-	}
+    throws DeterFault {
+    expireCredentials();
+    
+    //CredentialFactory cf = c.getCredentialFactory();
+    Pattern rule = Pattern.compile("^\\w+\\.([\\w:]+\\.)*[\\w:]+\\s*<-+\\s*.+");
+    
+    Collection <String> cstr = findCredentialsUnion(sets, "cred");
+    for (String cs: cstr ) {
+        Credential[] creds = credCache.get(cs);
+        if ( creds == null ) {
+            /*try {
+                creds = cf.parseCredential(cs, c.identities());
+            }
+            catch (ABACException e) {
+                continue;
+            }*/
+            
+            Matcher rm = rule.matcher(cs);
+            if (rm.find()) {
+            	String[] roles = cs.split("<-+");
+            	Credential cred = new InternalCredential(new Role(roles[0].trim()), 
+            	                                            new Role(roles[1].trim()));
+            	creds = new Credential[]{cred};
+            }
+            
+            if (creds == null) continue;
+            credCache.put(cs, creds);
+        }
+        for (Credential cr: creds)
+    	c.load_attribute_chunk(cr);
+    }
     }
 
     /**

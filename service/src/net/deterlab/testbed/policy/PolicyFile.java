@@ -159,7 +159,6 @@ public class PolicyFile {
 	    LineNumberReader r = new LineNumberReader(new FileReader(file));
 	    String l = null;
 
-
 	    while ( (l = r.readLine()) != null ) {
 		Matcher m = commentLine.matcher(l);
 
@@ -196,6 +195,9 @@ public class PolicyFile {
 	    // Replace old with new.
 	    if (clearExisting) cdb.removeCredentials(sets);
 	    cdb.addCredentials(creds, sets);
+	    
+	    r.close();
+	    
 	}
 	catch (IOException e) {
 	    throw new DeterFault(DeterFault.internal,
@@ -284,6 +286,7 @@ public class PolicyFile {
 		// This is a credential - ignore it.
 	    }
 	    cdb.removeCredentials(sets);
+	    r.close();
 	}
 	catch (IOException e) {
 	    throw new DeterFault(DeterFault.internal,

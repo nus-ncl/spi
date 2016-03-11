@@ -90,77 +90,6 @@ public class CircleDB  extends PolicyObject {
 	checkScopedName(n); name = n;
     }
 
-//    /**
-//     * Get all valid permissions for a circle
-//     * @return all valid permissions for a circle
-//     * @throws DeterFault if there is a DB problem
-//     */
-//    public Set<String> getValidPerms() throws DeterFault {
-//	Set<String> rv = new HashSet<String>();
-//	try {
-//	    PreparedStatement p= getPreparedStatement(
-//		    "SELECT name FROM permissions WHERE valid_for = 'circle'");
-//	    ResultSet r = p.executeQuery();
-//
-//	    while (r.next())
-//		rv.add(r.getString(1));
-//	    return rv;
-//	}
-//	catch (SQLException e) {
-//	    throw new DeterFault(DeterFault.internal,
-//		    "Cannot get valid circle permissions: " + e);
-//	}
-//    }
-
-//    /**
-//     * Expand special tokens like ALL_PERMS and then validate the collection of
-//     * permissions. Return them as a set if valid, throw a fault if not.
-//     * @param perms the permissions to check
-//     * @return the permissions in a set
-//     * @throws DeterFault if the perms are invalid or there's a DB problem
-//     */
-//    public Set<String> validatePerms(Collection<String> perms)
-//	    throws DeterFault {
-//	Set<String> pSet = new HashSet<String>(perms);
-//	try {
-//	    if (pSet.contains(ALL_PERMS)) {
-//		pSet.remove(ALL_PERMS);
-//		pSet.addAll(getValidPerms());
-//	    }
-//
-//	    if ( pSet.isEmpty()) return pSet;
-//
-//	    StringBuilder sb = new StringBuilder(
-//		    "SELECT count(*) FROM permissions ");
-//	    for (int i = 0; i < pSet.size(); i++) {
-//		if ( i == 0 ) sb.append("WHERE (name =? ");
-//		else sb.append("OR name = ? ");
-//	    }
-//	    sb.append(") AND valid_for = 'circle'");
-//	    int idx = 1;
-//
-//	    PreparedStatement p = getPreparedStatement(sb.toString());
-//	    for (String perm: pSet)
-//		p.setString(idx++, perm);
-//	    ResultSet r = p.executeQuery();
-//	    int rows = 0;
-//	    int count = 0;
-//	    while (r.next()) {
-//		if (rows ++ > 0 )
-//		    throw new DeterFault(DeterFault.internal,
-//			"Wrong number of rows in validatePerms?");
-//		count = r.getInt(1);
-//	    }
-//	    if ( count != pSet.size())
-//		throw new DeterFault(DeterFault.request, "Invalid permission");
-//	    return pSet;
-//	}
-//	catch (SQLException e) {
-//	    throw new DeterFault(DeterFault.internal,
-//		    "Cannot validate circle permissions: " + e);
-//	}
-//    }
-
     /**
      * Remove and regenerate the credentials for this user in this circle
      * @param uid the user to reset
@@ -190,39 +119,6 @@ public class CircleDB  extends PolicyObject {
 	}
     }
 
-//    /**
-//     * Remove the user credentials from the old owner (if any) and create an
-//     * owner credential for the new one.
-//     * @param oldOwner the old owner (may be null)
-//     * @param newOwner the new owner
-//     * @throws DeterFault if something is wrong internally
-//     */
-//    public void updateOwnerCredentials(String oldOwner, String newOwner)
-//	    throws DeterFault {
-//
-//	if (newOwner == null ) return;
-//
-//	Config config = new Config();
-//	String files = config.getProperty("circleOwnerPolicy");
-//	CredentialStoreDB cdb = null;
-//
-//	try {
-//	    cdb = new CredentialStoreDB(getSharedConnection());
-//	    for ( String fn : files.split(",")) {
-//		PolicyFile userPolicy = new PolicyFile(new File(fn));
-//		userPolicy.updateCredentials(cdb, getName(), newOwner,
-//			null, null);
-//		if ( oldOwner != null)
-//		    userPolicy.removeCredentials(cdb, getName(), oldOwner);
-//	    }
-//	    cdb.close();
-//	}
-//	catch (DeterFault df) {
-//	    if ( cdb != null ) cdb.forceClose();
-//	    throw df;
-//	}
-//    }
-
     /**
      * Remove user credentials for uid. If uid is null, remove all the
      * credentials for this circle.
@@ -248,14 +144,6 @@ public class CircleDB  extends PolicyObject {
 	    if (cdb != null ) cdb.forceClose();
 	    throw df;
 	}
-    }
-
-    /**
-     * Insert the circle policy.  This will need to be made less ad hoc.
-     * @throws DeterFault if something is wrong internally
-     */
-    public void updateCirclePolicy() throws DeterFault {
-    	updatePolicyCredentials();
     }
 
     /**

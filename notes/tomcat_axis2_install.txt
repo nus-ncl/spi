@@ -222,7 +222,7 @@ $ sudo mkdir -p /usr/local/etc/deter/realizations/
 $ sudo chown -R www:www /usr/local/etc/deter
 $ sudo chmod -R 775 /usr/local/etc/deter
 $ sudo mkdir -p /var/log/deter/
-$ sudo chown -R www:www /usr/local/etc/deter
+$ sudo chown -R www:www /var/log/deter/
 $ sudo chmod -R 775 /var/log/deter
 $ sudo touch /var/log/deter/service.log
 $ sudo chown -R www:www /var/log/deter/service.log

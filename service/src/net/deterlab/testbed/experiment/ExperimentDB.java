@@ -776,8 +776,8 @@ public class ExperimentDB extends ACLObject {
 	    throw df;
 	}
 	updatePolicyCredentials();
-	updateCircleCredentials();
 	updateOwnerCredentials(null, owner);
+	updateCircleCredentials();
     }
 
     /**

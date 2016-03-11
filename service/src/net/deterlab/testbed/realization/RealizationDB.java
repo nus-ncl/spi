@@ -589,7 +589,7 @@ public class RealizationDB extends ACLObject {
 		File f = null;
 
 		if ( (tfn = r.getString(1)) == null ) continue;
-		if ( (f = new File(tfn)) == null ) continue;
+		f = new File(tfn);
 		f.delete();
 	    }
 

@@ -56,8 +56,8 @@ user_$UID_removeUser <- approved & circle_admin:admin
 # requestChallenge - anyone
 # requestPasswordReset - anyone
 # sendNotification - not per-user
-# createProject, viewProjects, viewExperiments, viewLibraries and viewCircle
-# are essentially per-user (and admin works, too).
+# createProject, viewProjects, viewExperiments, viewResources, viewLibraries
+# and viewCircles are essentially per-user (and admin works, too).
 
 user_$UID_viewProjects <- user_$UID
 user_$UID_viewProjects <- approved & circle_admin:admin
@@ -71,8 +71,12 @@ user_$UID_viewExperiments <- approved & circle_admin:admin
 user_$UID_viewLibraries <- user_$UID
 user_$UID_viewLibraries <- approved & circle_admin:admin
 
+user_$UID_viewResources <- user_$UID
+user_$UID_viewResources <- approved & circle_admin:admin
+
 user_$UID_createProject <- user_$UID
 user_$UID_createProject <- approved & circle_admin:admin
+
 # joinProject is per user.
 user_$UID_joinProject <- user_$UID
 

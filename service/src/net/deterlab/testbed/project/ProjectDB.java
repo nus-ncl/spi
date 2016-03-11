@@ -21,7 +21,7 @@ import net.deterlab.testbed.api.Member;
 import net.deterlab.testbed.circle.CircleChallengeDB;
 import net.deterlab.testbed.circle.CircleDB;
 import net.deterlab.testbed.circle.CircleProfileDB;
-import net.deterlab.testbed.db.DBObject;
+import net.deterlab.testbed.db.PolicyObject;
 import net.deterlab.testbed.db.SharedConnection;
 import net.deterlab.testbed.policy.CredentialStoreDB;
 import net.deterlab.testbed.policy.PolicyFile;
@@ -30,7 +30,7 @@ import net.deterlab.testbed.policy.PolicyFile;
  * @author DETER team
  * @version 1.0
  */
-public class ProjectDB extends DBObject {
+public class ProjectDB extends PolicyObject {
     /** Is this project approved? */
     static private final int APPROVED = 1<<0;
     /** The name of the project */
@@ -59,10 +59,16 @@ public class ProjectDB extends DBObject {
      * @throws DeterFault if there is a DB initialization error
      */
     public ProjectDB() throws DeterFault {
-	super();
-	name = null;
+    this(null, null);
     }
 
+    /**
+     * Create a new DB interface to the project named n
+     * @param n the name of the project
+     * @throws DeterFault if the name is improperly formatted
+     */
+    public ProjectDB(String n) throws DeterFault { this(n, null); }
+    
     /**
      * Create a new DB interface to the project named n and
      * sharing connection sc.
@@ -71,7 +77,7 @@ public class ProjectDB extends DBObject {
      * @throws DeterFault if the name is improperly formatted
      */
     public ProjectDB(String n, SharedConnection sc) throws DeterFault {
-	super(sc);
+    super("project", sc);;
 	try {
 	    checkName(n);
 	}
@@ -83,11 +89,11 @@ public class ProjectDB extends DBObject {
     }
 
     /**
-     * Create a new DB interface to the project named n
-     * @param n the name of the project
-     * @throws DeterFault if the name is improperly formatted
+     * Let the PolicyObject class know the name
+     * @return the name
      */
-    public ProjectDB(String n) throws DeterFault { this(n, null); }
+    protected String getID() { return getName(); }
+    
     /**
      * Return the project name
      * @return the project name
@@ -100,28 +106,6 @@ public class ProjectDB extends DBObject {
      */
     public void setName(String n) throws DeterFault { checkName(n); name = n; }
 
-    /**
-     * Get all valid permissions for a project.  These are just valid project
-     * permissions, not valid permissions for the underlying circle.
-     * @return all valid permissions for a project.
-     * @throws DeterFault if there is a DB problem
-     */
-    public Set<String> getValidPerms() throws DeterFault {
-	Set<String> rv = new HashSet<String>();
-	try {
-	    PreparedStatement p= getPreparedStatement(
-		    "SELECT name FROM permissions WHERE valid_for = 'project'");
-	    ResultSet r = p.executeQuery();
-
-	    while (r.next())
-		rv.add(r.getString(1));
-	    return rv;
-	}
-	catch (SQLException e) {
-	    throw new DeterFault(DeterFault.internal,
-		    "Cannot get valid circle permissions: " + e);
-	}
-    }
     /**
      * Expand special tokens like ALL_PERMS and then validate the collection of
      * permissions. Return them as a set if valid, throw a fault if not. This
@@ -258,31 +242,6 @@ public class ProjectDB extends DBObject {
     }
 
     /**
-     * Insert the project policy.  This will need to be made less ad hoc.
-     * @throws DeterFault if something is wrong internally
-     */
-    public void updateProjectPolicy() throws DeterFault {
-	Config config = new Config();
-	String files = config.getProperty("projectPolicy");
-	CredentialStoreDB cdb = null;
-
-	try {
-	    cdb = new CredentialStoreDB(getSharedConnection());
-	    for (String fn: files.split(",") ) {
-		PolicyFile projectPolicy = new PolicyFile(new File(fn));
-		// Permissions are the valid permissions here.
-		projectPolicy.updateCredentials(cdb, getName(), null,
-			getValidPerms(), null);
-	    }
-	    cdb.close();
-	}
-	catch (DeterFault df) {
-	    if ( cdb != null ) cdb.forceClose();
-	    throw df;
-	}
-    }
-
-    /**
      * Look the project up in the DB and make sure that it exists.
      * @return true if the project is valid
      * @throws DeterFault if something is wrong internally
@@ -357,7 +316,6 @@ public class ProjectDB extends DBObject {
      * @throws DeterFault if something is wrong internally
      */
     public boolean checkFlags(int flags, int mask) throws DeterFault {
-	boolean rv = false;
 
 	if ( getName() == null ) return false;
 
@@ -677,7 +635,7 @@ public class ProjectDB extends DBObject {
 	    updateUserCredentials(o);
 	}
 	catch (SQLException e) {
-	    if ( linked != null ) linked.forceClose();
+	    //if ( linked != null ) linked.forceClose();
 	    throw new DeterFault(DeterFault.internal, e.getMessage());
 	}
 	catch (DeterFault df) {
@@ -749,11 +707,11 @@ public class ProjectDB extends DBObject {
 	catch (SQLIntegrityConstraintViolationException e) {
 	    // Constraint exceptions happen because the subqueries fail to find
 	    // indices for a user or project.  Usually this is a bad username.
-	    if (linked != null ) linked.forceClose();
+	    //if (linked != null ) linked.forceClose();
 	    throw new DeterFault(DeterFault.request, "Bad uid (or projectid)");
 	}
 	catch (SQLException e) {
-	    if (linked != null ) linked.forceClose();
+	    //if (linked != null ) linked.forceClose();
 	    throw new DeterFault(DeterFault.internal, e.getMessage());
 	}
 	catch (DeterFault df) {
@@ -818,7 +776,7 @@ public class ProjectDB extends DBObject {
 	    updateUserCredentials(uid);
 	}
 	catch (SQLException e) {
-	    if (linked != null ) linked.forceClose();
+	    //if (linked != null ) linked.forceClose();
 	    throw new DeterFault(DeterFault.internal, e.getMessage());
 	}
 	catch (DeterFault df) {
@@ -876,7 +834,7 @@ public class ProjectDB extends DBObject {
 	    removeUserCredentials(uid);
 	}
 	catch (SQLException e) {
-	    if (linked != null) linked.forceClose();
+	    //if (linked != null) linked.forceClose();
 	    throw new DeterFault(DeterFault.internal, e.getMessage());
 	}
 	catch (DeterFault df) {
@@ -939,20 +897,21 @@ public class ProjectDB extends DBObject {
      */
     public void create(String owner) throws DeterFault {
 	PreparedStatement p = null;
-	CircleDB linked = null;
+	//CircleDB linked = null;
 
 	try {
 	    if ( getName() == null)
 		throw new DeterFault(DeterFault.internal, 
 			"create failed. Project does not have a name");
 
-	    String circleid = getName() + ":" + getName();
+	    //String circleid = getName() + ":" + getName();
 	    try {
 		p = getPreparedStatement(
 			"INSERT INTO scopenames (name, type) "+
 			    "VALUES (?, 'project')");
 		p.setString(1, getName());
 		p.executeUpdate();
+		p.close();
 	    }
 	    catch (SQLIntegrityConstraintViolationException e) {
 		throw new DeterFault(DeterFault.request,
@@ -967,6 +926,7 @@ public class ProjectDB extends DBObject {
 		p.setString(1, getName());
 		p.setString(2, owner);
 		p.executeUpdate();
+		p.close();
 	    }
 	    catch (SQLIntegrityConstraintViolationException e) {
 		// Bad owner - remove the scopename
@@ -975,6 +935,7 @@ public class ProjectDB extends DBObject {
 			    "DELETE FROM  scopenames WHERE name=?");
 		    p.setString(1, getName());
 		    p.execute();
+		    p.close();
 		}
 		catch (SQLException ignored) { }
 		throw new DeterFault(DeterFault.request,
@@ -1000,16 +961,23 @@ public class ProjectDB extends DBObject {
 
 	    // addLinkedCircle(circleid, owner);
 
-	    updateProjectPolicy();
+	    updatePolicyCredentials();
 	}
 	catch (SQLException e) {
-	    if ( linked != null ) linked.forceClose();
+	    //if ( linked != null ) linked.forceClose();
 	    throw new DeterFault(DeterFault.internal, e.getMessage());
 	}
 	catch (DeterFault df) {
-	    if ( linked != null ) linked.forceClose();
+	    //if ( linked != null ) linked.forceClose();
 	    throw df;
-	}
+	}finally {
+    	try{
+    		p.close();
+    	} catch (SQLException e) {
+    		/* exception ignored */
+    		/* Don't know a better approach */
+    	}
+    }
     }
     /**
      * Completely remove this project.  The project's profile must be empty
@@ -1138,7 +1106,6 @@ public class ProjectDB extends DBObject {
 		}
 	    }
 	    ResultSet r = p.executeQuery();
-	    SharedConnection shared = null;
 
 	    // Build the lists of projects as ProjectDBs that share a
 	    // connection.
