@@ -496,7 +496,7 @@ public class CredentialStoreDB extends DBObject {
     expireCredentials();
     
     //CredentialFactory cf = c.getCredentialFactory();
-    Pattern rule = Pattern.compile("^\\w+\\.([\\w:]+\\.)*[\\w:]+\\s*<-+\\s*.+");
+    Pattern rule = Pattern.compile("^\\w+\\.([\\w:-]+\\.)*[\\w:-]+\\s*<-+\\s*.+");
     
     Collection <String> cstr = findCredentialsUnion(sets, "cred");
     for (String cs: cstr ) {
