@@ -319,7 +319,7 @@ public class Realizations extends DeterService {
 	    if ( offset != null && count == null )
 		    throw new DeterFault(DeterFault.request,
 			    "Offset without count");
-	    if ( count != null )
+	    if ( count != null && count != 0 )
 		cnt = count;
 
 	    if  ( offset != null )
