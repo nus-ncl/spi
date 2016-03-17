@@ -279,7 +279,7 @@ public class Admin extends DeterService {
 	    log.info("updating projects policy");
 	    projects = ProjectDB.getProjects(null, null, sc);
 	    for (ProjectDB p : projects ) {
-		p.updateProjectPolicy();
+		p.updatePolicyCredentials();
 		for (Member m: p.getMembers())
 		    p.updateUserCredentials(m.getUid());
 		p.close();
@@ -291,7 +291,7 @@ public class Admin extends DeterService {
 	    log.info("updating circles policy");
 	    circles = CircleDB.getCircles(null, null, sc);
 	    for (CircleDB c : circles ) {
-		c.updateCirclePolicy();
+		c.updatePolicyCredentials();
 		for (Member m: c.getMembers())
 		    c.updateUserCredentials(m.getUid());
 		c.close();

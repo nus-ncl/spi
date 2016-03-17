@@ -346,7 +346,7 @@ public class UserDB extends DBObject {
 	    }
 	}
 	catch (SQLException e) {
-	    if ( circle != null ) circle.forceClose();
+	    //if ( circle != null ) circle.forceClose();
 	    throw new DeterFault(DeterFault.internal, 
 		    "Database error reading user: " + e);
 	}
@@ -419,7 +419,7 @@ public class UserDB extends DBObject {
 	catch (SQLException e) {
 	    if ( not != null ) not.forceClose();
 	    if ( cdb != null) cdb.forceClose();
-	    if ( circle != null) circle.forceClose();
+	    //if ( circle != null) circle.forceClose();
 	    if ( profile != null) profile.forceClose();
 	    if ( challenges != null) challenges.forceClose();
 	    if ( pchallenges != null) pchallenges.forceClose();

@@ -1,38 +1,17 @@
 package net.deterlab.testbed.util;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-
-import java.security.KeyPair;
-import java.security.KeyStore;
 import java.security.GeneralSecurityException;
-
-import java.security.cert.X509Certificate;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import javax.activation.DataHandler;
-
-import net.deterlab.abac.Identity;
 import net.deterlab.abac.ABACException;
-
-import net.deterlab.testbed.api.UserChallenge;
+import net.deterlab.abac.Identity;
 import net.deterlab.testbed.api.DeterFault;
-
-import net.deterlab.testbed.client.UsersDeterFault;
-import net.deterlab.testbed.client.UsersStub;
-
 import net.deterlab.testbed.util.gui.LoginDialog;
 import net.deterlab.testbed.util.option.Option;
 import net.deterlab.testbed.util.option.ParamOption;
-
-import org.apache.axis2.AxisFault;
 
 /**
  * Log the user in to the DETER API.  Such a login results in an X.509
