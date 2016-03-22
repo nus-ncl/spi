@@ -51,4 +51,5 @@ dependencies {
     compile files('lib/jabac-1.5.jar')
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile 'org.jmockit:jmockit:1.22'
 }
