@@ -75,6 +75,14 @@ public class DBObjectTest {
     }
 
     @Test
+    public void close3(@Mocked final SharedConnection sharedConnection) throws Exception {
+        final DBObject o = new DBObject(sharedConnection);
+
+        o.close();
+        o.close();
+    }
+
+    @Test
     public void forceClose1(@Mocked final SharedConnection sharedConnection) throws Exception {
         final DBObject o = new DBObject(sharedConnection);
 
