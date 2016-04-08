@@ -34,17 +34,13 @@ public class ApiObjectTest {
     }
     
     @Test
-    public void stringToDateValid() {
+    public void stringToDateValid() throws Exception {
         // Convert Apr 01 2016 17:00 GMT+0000 to SGT
         Date myDateResult = ApiObject.stringToDate("20160401T170000Z");
         SimpleDateFormat isoFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
         isoFormat.setTimeZone(TimeZone.getTimeZone("GMT+0000"));
         Date myDateExpected = new Date();
-        try {
-            myDateExpected = isoFormat.parse("20160401T170000Z");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        myDateExpected = isoFormat.parse("20160401T170000Z");
         assertThat(myDateResult, is(equalTo(myDateExpected)));
     }
     
