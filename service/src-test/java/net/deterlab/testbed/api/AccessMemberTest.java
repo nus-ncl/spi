@@ -15,6 +15,11 @@ import static org.junit.Assert.*;
 
 import static org.hamcrest.CoreMatchers.*;
 
+/**
+ * @author yeoteye
+ *
+ */
+
 @RunWith(JMockit.class)
 public class AccessMemberTest {
     

@@ -20,6 +20,11 @@ import java.util.TimeZone;
 
 import static org.hamcrest.CoreMatchers.*;
 
+/**
+ * @author yeoteye
+ *
+ */
+
 @RunWith(JMockit.class)
 public class ApiObjectTest {
     

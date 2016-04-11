@@ -17,6 +17,11 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
 
+/**
+ * @author yeoteye
+ *
+ */
+
 @RunWith(JMockit.class)
 public class CircleDescriptionTest {
 
