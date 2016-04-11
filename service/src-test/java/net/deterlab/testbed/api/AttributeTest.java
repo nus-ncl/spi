@@ -170,8 +170,21 @@ public class AttributeTest {
     }
     
     @Test
-    public void export() {
-        // TBD
+    public void exportValid() {
+        final Attribute o = new Attribute("email", "demo@example.com", "STRING", true, "READ_WRITE", "a simple description", "//s+", "a format description", 0, 0);
+        assertThat(o.export().toString(), is("Name: email Value: demo@example.com"));
+    }
+    
+    @Test
+    public void exportNullValue() {
+        final Attribute o = new Attribute("email", "demo@example.com", "STRING", true, "NO_ACCESS", "a simple description", "//s+", "a format description", 0, 0);
+        assertThat(o.export().toString(), is("Name: email Value: null"));
+    }
+    
+    @Test
+    public void exportNull() {
+        final Attribute o = new Attribute();
+        assertThat(o.export().toString(), is("Name: null Value: null"));
     }
     
     @Test
@@ -247,7 +260,8 @@ public class AttributeTest {
     }
     
     @Test
-    public void cloneTest() {
-        // TBD
+    public void cloneTest() throws Exception {
+        final Attribute o = new Attribute("email", "demo@example.com", "STRING", true, "READ_WRITE", "a simple description", "//s+", "a format description", 0, 0);
+        assertThat(o.clone().toString(), is(o.toString()));
     }
 }
